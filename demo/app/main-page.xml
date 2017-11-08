@@ -7,6 +7,6 @@
                 <Label text="{{selection ? selection + ' is my favorite programming language.' : ''}}" textWrap="true" style="font-size: 30; text-align: center; font-weight: bold; color: white;" />
             </StackLayout>
         </GridLayout>
-        <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancelTapped="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
+        <ui:FilterableListpicker id="myfilter" dimmerColor="rgba(76,196,211,0.7)" hintText="Type to filter..." source="{{listitems}}" canceled="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
     </GridLayout>
 </Page>

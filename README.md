@@ -15,6 +15,8 @@ tns plugin add nativescript-filterable-listpicker
 
 ## Usage 
 In order to use the plugin, you must place it on your page within a namespace. Wherever you place it, thats where it will display when invoked, but it will be hidden until you invoke it. The best way to use this is to place it on top of your page content like this: 
+
+### NativeScript Core
 	
 	```xml
     <GridLayout>
@@ -23,7 +25,7 @@ In order to use the plugin, you must place it on your page within a namespace. W
             <Label text="Whats your favorite programming language?" />
             <Button text="Choose a Language" tap="{{showPicker}}" />
         </StackLayout>
-        <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancelTapped="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />
+        <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancel="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />
     </GridLayout>
     ```)
 
@@ -34,7 +36,7 @@ Then in your code...
     }
 
     public itemTapped(args) {
-        alert(MyModel.listitems[args.index] + ' was tapped!')
+        alert(args.selectedItem + ' was tapped!')
     }
 
     public cancelFilterableList() {
@@ -43,14 +45,60 @@ Then in your code...
     ```)
 
 
+### NativeScript Angular
+    In angular, you have to register the element in your app component like so:
+    ```javascript
+    // app.component.ts
+    import {registerElement} from "nativescript-angular/element-registry";
+    registerElement("FilterableListpicker", () => require("nativescript-filterable-listpicker").FilterableListpicker);
+    ```
+
+    Then use it in your templates like...
+
+    ```xml
+    <GridLayout>
+        <Image src="res://nicebackgroundimage.jpg" />
+        <StackLayout>
+            <Label text="Whats your favorite programming language?" />
+            <Button text="Choose a Language" tap="{{showPicker}}" />
+        </StackLayout>
+        <FilterableListpicker #myfilter blur="dark" hintText="Type to filter..." [source]="listitems" (canceled)="cancelFilterableList($event)" (itemTapped)="itemTapped($event)"></FilterableListpicker>
+    </GridLayout>
+    ```)
+
+Then in your code...
+    ```javascript
+
+    @ViewChild('myfilter') myfilter: ElementRef;
+
+    cancelFilterableList() {
+        console.log('canceled');
+    }
+
+    itemTapped(args) {
+        alert(args.selectedItem)
+    }
+
+    showPicker() {
+        this.myfilter.nativeElement.show();
+    }
+    ```)    
+
 ## API
 
-Describe your plugin methods and properties here. See [nativescript-feedback](https://github.com/EddyVerbruggen/nativescript-feedback) for example.
+The UI element accepts the following parameters:
     
 | Property | Default | Description |
 | --- | --- | --- |
-| some property | property default value | property description, default values, etc.. |
-| another property | property default value | property description, default values, etc.. |
+| source | REQUIRED | The array of strings you want to display in the picker. |
+| hintText | Enter text to filter... | This is the text that shows up as the hint for the textfield used to filter the list. |
+| listWidth | 300 | The width of the modal element. |
+| listHeight | 300 | The height of the modal element. |
+| dimmerColor | rgba(0,0,0,0.8) | The color of the dimmer behind the modal. You can set it to `transparent`, or any color supported by NativeScript (ex: `rgba(255,255,255,0.5)`, `red`, `#0088CC`) |
+| blur | dark | iOS only. Pass `dark` or `light` for a dark or light blur effect. If this is passed, dimmerColor is ignored on iOS but respected on Android. |
+| itemTapped(args) |  | This is the function called when an item in the list is tapped. The modal is automically dismissed, and you can access to item tapped with `args.selectedItem`. |
+| canceled |  | This is just a function to call if the user cancels, probably rarely neccessary. |
+
     
 ## License
 

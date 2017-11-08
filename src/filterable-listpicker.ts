@@ -16,8 +16,6 @@ export const dimmerColorProperty = new Property<FilterableListpicker, string>({ 
 export const blurProperty = new Property<FilterableListpicker, string>({ name: "blur", defaultValue: 'none' });
 export const hintTextProperty = new Property<FilterableListpicker, string>({ name: "hintText", defaultValue: 'Enter text to filter...' });
 export const sourceProperty = new Property<FilterableListpicker, ObservableArray<string>>({ name: "source", defaultValue: new ObservableArray(["Test"]), affectsLayout: true });
-export const itemTappedProperty = new Property<FilterableListpicker, string>({ name: "itemTapped", defaultValue: undefined });
-export const cancelTappedProperty = new Property<FilterableListpicker, string>({name: "cancelTapped", defaultValue: undefined});
 
 export class FilterableListpicker extends GridLayout {
     constructor() {
@@ -43,28 +41,33 @@ export class FilterableListpicker extends GridLayout {
             })
         })
     }
-
+    public static canceledEvent = "canceled";
+    public static itemTappedEvent = "itemTapped";
     public source: any;
     public dimmerColor: any;
     public hintText: any;
-    public blur: any;
-    public cancelTapped: any;
-    public itemTapped: any;
-    
+    public blur: any;    
     private blurView: any = false;
     private unfilteredSource: Array<string> = [];
 
     public choose(args) {
+        let item = this.source[args.index];
         this.hide();
-        if (this.itemTapped) this.itemTapped(args);
+        this.notify({
+            eventName: 'itemTapped',
+            object: this,
+            selectedItem: item
+        });
     }
 
     public cancel() {
-        this.hide().then(() => {
-            if (this.cancelTapped) this.cancelTapped();
-        })
+        this.notify({
+            eventName: 'canceled',
+            object: this
+        });
+        this.hide();
     }
-
+    
     public hide() {
         let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
         let picker: StackLayout = frame.topmost().getViewById('dc_flp') as StackLayout;
@@ -146,5 +149,3 @@ dimmerColorProperty.register(FilterableListpicker);
 blurProperty.register(FilterableListpicker);
 hintTextProperty.register(FilterableListpicker);
 sourceProperty.register(FilterableListpicker);
-itemTappedProperty.register(FilterableListpicker);
-cancelTappedProperty.register(FilterableListpicker);

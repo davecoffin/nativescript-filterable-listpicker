@@ -8,7 +8,7 @@
             </ListView.itemTemplate>
         </ListView>
         <StackLayout style="background-color: #E0E0E0; height: 40; border-radius: 0 0 10 10;">
-            <Button text="Cancel" tap="{{cancel}}" verticalAlignment="middle" style="font-weight: bold; background-color: transparent; background-color: transparent; border-color: transparent; border-width: 1; font-size: 12;" />    
+            <Button text="Cancel" tap="{{cancel}}" verticalAlignment="middle" style="font-weight: bold; height: 40; background-color: transparent; background-color: transparent; border-color: transparent; border-width: 1; font-size: 12;" />    
         </StackLayout>
     </StackLayout>
 </GridLayout>
