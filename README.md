@@ -18,7 +18,7 @@ In order to use the plugin, you must place it on your page within a namespace. W
 
 ### NativeScript Core
 	
-	```xml
+	```
     <GridLayout>
         <Image src="res://nicebackgroundimage.jpg" />
         <StackLayout>
@@ -27,10 +27,10 @@ In order to use the plugin, you must place it on your page within a namespace. W
         </StackLayout>
         <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancel="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />
     </GridLayout>
-    ```)
+    ```
 
 Then in your code...
-    ```javascript
+    ```
     public showPicker() {
         page.getViewById('myfilter').show();
     }
@@ -42,12 +42,12 @@ Then in your code...
     public cancelFilterableList() {
         // this gets called if the user cancels the modal. 
     }
-    ```)
+    ```
 
 
 ### NativeScript Angular
     In angular, you have to register the element in your app component like so:
-    ```javascript
+    ```
     // app.component.ts
     import {registerElement} from "nativescript-angular/element-registry";
     registerElement("FilterableListpicker", () => require("nativescript-filterable-listpicker").FilterableListpicker);
@@ -55,7 +55,7 @@ Then in your code...
 
     Then use it in your templates like...
 
-    ```xml
+    ```
     <GridLayout>
         <Image src="res://nicebackgroundimage.jpg" />
         <StackLayout>
@@ -64,11 +64,10 @@ Then in your code...
         </StackLayout>
         <FilterableListpicker #myfilter blur="dark" hintText="Type to filter..." [source]="listitems" (canceled)="cancelFilterableList($event)" (itemTapped)="itemTapped($event)"></FilterableListpicker>
     </GridLayout>
-    ```)
+    ```
 
 Then in your code...
-    ```javascript
-
+    ```
     @ViewChild('myfilter') myfilter: ElementRef;
 
     cancelFilterableList() {
@@ -82,7 +81,7 @@ Then in your code...
     showPicker() {
         this.myfilter.nativeElement.show();
     }
-    ```)    
+    ```
 
 ## API
 
