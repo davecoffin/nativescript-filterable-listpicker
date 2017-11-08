@@ -4,7 +4,7 @@
 
 The native listpickers on iOS and Android are not great for huge lists that users may want to filter. This plugin is a modal that offers filtering capabilities.
 
-<img src="https://github.com/davecoffin/nativescript-filterable-listpicker/blob/master/assets/filterablelist.gif?raw=true" height="320" > 
+<img src="https://github.com/davecoffin/nativescript-filterable-listpicker/blob/master/assets/filterablelist.gif?raw=true" height="600" > 
 
 
 ## Installation
