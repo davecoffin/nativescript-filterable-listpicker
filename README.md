@@ -9,7 +9,7 @@ The native listpickers on iOS and Android are not great for huge lists that user
 
 ## Installation
 
-```javascript
+```
 tns plugin add nativescript-filterable-listpicker
 ```
 
@@ -18,70 +18,71 @@ In order to use the plugin, you must place it on your page within a namespace. W
 
 ### NativeScript Core
 	
-	```
-    <GridLayout>
-        <Image src="res://nicebackgroundimage.jpg" />
-        <StackLayout>
-            <Label text="Whats your favorite programming language?" />
-            <Button text="Choose a Language" tap="{{showPicker}}" />
-        </StackLayout>
-        <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancel="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />
-    </GridLayout>
-    ```
+```
+<GridLayout>
+    <Image src="res://nicebackgroundimage.jpg" />
+    <StackLayout>
+        <Label text="Whats your favorite programming language?" />
+        <Button text="Choose a Language" tap="{{showPicker}}" />
+    </StackLayout>
+    <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancel="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />
+</GridLayout>
+```
 
 Then in your code...
-    ```
-    public showPicker() {
-        page.getViewById('myfilter').show();
-    }
+```
+public showPicker() {
+    page.getViewById('myfilter').show();
+}
 
-    public itemTapped(args) {
-        alert(args.selectedItem + ' was tapped!')
-    }
+public itemTapped(args) {
+    alert(args.selectedItem + ' was tapped!')
+}
 
-    public cancelFilterableList() {
-        // this gets called if the user cancels the modal. 
-    }
-    ```
+public cancelFilterableList() {
+    // this gets called if the user cancels the modal. 
+}
+```
 
 
 ### NativeScript Angular
-    In angular, you have to register the element in your app component like so:
-    ```
-    // app.component.ts
-    import {registerElement} from "nativescript-angular/element-registry";
-    registerElement("FilterableListpicker", () => require("nativescript-filterable-listpicker").FilterableListpicker);
-    ```
+In angular, you have to register the element in your app component like so:
 
-    Then use it in your templates like...
+```
+// app.component.ts
+import {registerElement} from "nativescript-angular/element-registry";
+registerElement("FilterableListpicker", () => require("nativescript-filterable-listpicker").FilterableListpicker);
+```
 
-    ```
-    <GridLayout>
-        <Image src="res://nicebackgroundimage.jpg" />
-        <StackLayout>
-            <Label text="Whats your favorite programming language?" />
-            <Button text="Choose a Language" tap="{{showPicker}}" />
-        </StackLayout>
-        <FilterableListpicker #myfilter blur="dark" hintText="Type to filter..." [source]="listitems" (canceled)="cancelFilterableList($event)" (itemTapped)="itemTapped($event)"></FilterableListpicker>
-    </GridLayout>
-    ```
+Then use it in your templates like...
+
+```
+<GridLayout>
+    <Image src="res://nicebackgroundimage.jpg" />
+    <StackLayout>
+        <Label text="Whats your favorite programming language?" />
+        <Button text="Choose a Language" tap="{{showPicker}}" />
+    </StackLayout>
+    <FilterableListpicker #myfilter blur="dark" hintText="Type to filter..." [source]="listitems" (canceled)="cancelFilterableList($event)" (itemTapped)="itemTapped($event)"></FilterableListpicker>
+</GridLayout>
+```
 
 Then in your code...
-    ```
-    @ViewChild('myfilter') myfilter: ElementRef;
+```
+@ViewChild('myfilter') myfilter: ElementRef;
 
-    cancelFilterableList() {
-        console.log('canceled');
-    }
+cancelFilterableList() {
+    console.log('canceled');
+}
 
-    itemTapped(args) {
-        alert(args.selectedItem)
-    }
+itemTapped(args) {
+    alert(args.selectedItem)
+}
 
-    showPicker() {
-        this.myfilter.nativeElement.show();
-    }
-    ```
+showPicker() {
+    this.myfilter.nativeElement.show();
+}
+```
 
 ## API
 
