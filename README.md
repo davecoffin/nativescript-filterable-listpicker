@@ -4,7 +4,7 @@
 
 The native listpickers on iOS and Android are not great for huge lists that users may want to filter. This plugin is a modal that offers filtering capabilities.
 
-<img src="https://github.com/davecoffin/nativescript-blur/blob/master/blur.gif?raw=true" height="320" > 
+<img src="https://github.com/davecoffin/nativescript-filterable-listpicker/blob/master/assets/filterablelist.gif?raw=true" height="320" > 
 
 
 ## Installation
@@ -58,10 +58,10 @@ Then use it in your templates like...
 
 ```
 <GridLayout>
-    <Image src="res://nicebackgroundimage.jpg" />
+    <Image src="res://nicebackgroundimage.jpg"></Image>
     <StackLayout>
-        <Label text="Whats your favorite programming language?" />
-        <Button text="Choose a Language" tap="{{showPicker}}" />
+        <Label text="Whats your favorite programming language?"></Label>
+        <Button text="Choose a Language" (tap)="showPicker()"></Button>
     </StackLayout>
     <FilterableListpicker #myfilter blur="dark" hintText="Type to filter..." [source]="listitems" (canceled)="cancelFilterableList($event)" (itemTapped)="itemTapped($event)"></FilterableListpicker>
 </GridLayout>
@@ -95,7 +95,7 @@ The UI element accepts the following parameters:
 | listWidth | 300 | The width of the modal element. |
 | listHeight | 300 | The height of the modal element. |
 | dimmerColor | rgba(0,0,0,0.8) | The color of the dimmer behind the modal. You can set it to `transparent`, or any color supported by NativeScript (ex: `rgba(255,255,255,0.5)`, `red`, `#0088CC`) |
-| blur | dark | iOS only. Pass `dark` or `light` for a dark or light blur effect. If this is passed, dimmerColor is ignored on iOS but respected on Android. |
+| blur | none | iOS only. Pass `dark` or `light` for a dark or light blur effect. If this is passed, dimmerColor is ignored on iOS but respected on Android. |
 | itemTapped(args) |  | This is the function called when an item in the list is tapped. The modal is automically dismissed, and you can access to item tapped with `args.selectedItem`. |
 | canceled |  | This is just a function to call if the user cancels, probably rarely neccessary. |
 
