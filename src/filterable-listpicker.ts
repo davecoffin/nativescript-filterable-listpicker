@@ -23,19 +23,19 @@ export class FilterableListpicker extends GridLayout {
         let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
         innerComponent.bindingContext = this;
         this.addChild(innerComponent);
-
-        setTimeout(() => {
-            this.source.forEach(element => {
-                this.unfilteredSource.push(element);
-            });
-            if (isIOS) {
-                let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
-                parent.visibility = "collapse";
-            }
-        }, 10)
         
         let textfield = innerComponent.getViewById('filterTextField')
         textfield.on('textChange', (data: any) => {
+            if (!this.isUnfilteredSourceSet){
+                this.source.forEach(element => {
+                    this.unfilteredSource.push(element);
+                });
+                if (isIOS) {
+                    let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
+                    parent.visibility = "collapse";
+                }
+                this.isUnfilteredSourceSet = true;
+            }
             this.source = this.unfilteredSource.filter(item => {
                 return item.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
             })
@@ -49,6 +49,7 @@ export class FilterableListpicker extends GridLayout {
     public blur: any;    
     private blurView: any = false;
     private unfilteredSource: Array<string> = [];
+    private isUnfilteredSourceSet: boolean = false;
 
     public choose(args) {
         let item = this.source[args.index];
