@@ -1,7 +1,6 @@
-import { Observable } from 'tns-core-modules/data/observable';
+
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
-import * as app from 'tns-core-modules/application';
-import * as dialogs from 'tns-core-modules/ui/dialogs';
+
 import { View, Property } from "tns-core-modules/ui/core/view";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from 'tns-core-modules/ui/layouts/grid-layout';
@@ -10,12 +9,22 @@ import * as frame from 'tns-core-modules/ui/frame';
 import { isIOS } from "tns-core-modules/platform";
 let builder = require('tns-core-modules/ui/builder');
 
+let unfilteredSource: Array<string> = [];
+
 export const listWidthProperty = new Property<FilterableListpicker, string>({ name: "listWidth", defaultValue: '300' });
 export const listHeightProperty = new Property<FilterableListpicker, string>({ name: "listHeight", defaultValue: '300' });
 export const dimmerColorProperty = new Property<FilterableListpicker, string>({ name: "dimmerColor", defaultValue: 'rgba(0,0,0,0.8)' });
 export const blurProperty = new Property<FilterableListpicker, string>({ name: "blur", defaultValue: 'none' });
 export const hintTextProperty = new Property<FilterableListpicker, string>({ name: "hintText", defaultValue: 'Enter text to filter...' });
-export const sourceProperty = new Property<FilterableListpicker, ObservableArray<string>>({ name: "source", defaultValue: new ObservableArray(["Test"]), affectsLayout: true });
+export const sourceProperty = new Property<FilterableListpicker, ObservableArray<string>>({ name: "source", defaultValue: undefined, affectsLayout: true, valueChanged: (target, oldValue, newValue) => {
+    if (!oldValue) {
+        let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
+        parent.visibility = "collapse";
+        newValue.forEach(element => {
+            unfilteredSource.push(element)
+        })
+    }    
+} });
 
 export class FilterableListpicker extends GridLayout {
     constructor() {
@@ -23,20 +32,9 @@ export class FilterableListpicker extends GridLayout {
         let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
         innerComponent.bindingContext = this;
         this.addChild(innerComponent);
-
-        setTimeout(() => {
-            this.source.forEach(element => {
-                this.unfilteredSource.push(element);
-            });
-            if (isIOS) {
-                let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
-                parent.visibility = "collapse";
-            }
-        }, 10)
-        
         let textfield = innerComponent.getViewById('filterTextField')
         textfield.on('textChange', (data: any) => {
-            this.source = this.unfilteredSource.filter(item => {
+            this.source = unfilteredSource.filter(item => {
                 return item.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
             })
         })
@@ -48,7 +46,6 @@ export class FilterableListpicker extends GridLayout {
     public hintText: any;
     public blur: any;    
     private blurView: any = false;
-    private unfilteredSource: Array<string> = [];
 
     public choose(args) {
         let item = this.source[args.index];
