@@ -86,6 +86,8 @@ showPicker() {
 }
 ```
 
+Note: You can change the items in the filterable list easily by just setting the source to an array in your observable, and changing then changing the array. Take a look at the demo project for an example.
+
 ## API
 
 The UI element accepts the following parameters:

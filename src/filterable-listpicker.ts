@@ -5,11 +5,14 @@ import { View, Property } from "tns-core-modules/ui/core/view";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from 'tns-core-modules/ui/layouts/grid-layout';
 import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout';
+import { TextField } from 'tns-core-modules/ui/text-field';
 import * as frame from 'tns-core-modules/ui/frame';
 import { isIOS } from "tns-core-modules/platform";
+import * as enums from "tns-core-modules/ui/enums";
 let builder = require('tns-core-modules/ui/builder');
 
 let unfilteredSource: Array<string> = [];
+let filtering: boolean = false;
 
 export const listWidthProperty = new Property<FilterableListpicker, string>({ name: "listWidth", defaultValue: '300' });
 export const listHeightProperty = new Property<FilterableListpicker, string>({ name: "listHeight", defaultValue: '300' });
@@ -17,9 +20,8 @@ export const dimmerColorProperty = new Property<FilterableListpicker, string>({ 
 export const blurProperty = new Property<FilterableListpicker, string>({ name: "blur", defaultValue: 'none' });
 export const hintTextProperty = new Property<FilterableListpicker, string>({ name: "hintText", defaultValue: 'Enter text to filter...' });
 export const sourceProperty = new Property<FilterableListpicker, ObservableArray<string>>({ name: "source", defaultValue: undefined, affectsLayout: true, valueChanged: (target, oldValue, newValue) => {
-    if (!oldValue) {
-        let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
-        parent.visibility = "collapse";
+    if (!filtering) {
+        while (unfilteredSource.length) unfilteredSource.pop();
         newValue.forEach(element => {
             unfilteredSource.push(element)
         })
@@ -32,11 +34,13 @@ export class FilterableListpicker extends GridLayout {
         let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
         innerComponent.bindingContext = this;
         this.addChild(innerComponent);
-        let textfield = innerComponent.getViewById('filterTextField')
+        let textfield: TextField = innerComponent.getViewById('filterTextField')
         textfield.on('textChange', (data: any) => {
+            filtering = true;
             this.source = unfilteredSource.filter(item => {
                 return item.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
             })
+            filtering = false;
         })
     }
     public static canceledEvent = "canceled";
@@ -46,6 +50,8 @@ export class FilterableListpicker extends GridLayout {
     public hintText: any;
     public blur: any;    
     private blurView: any = false;
+
+    visibility:any = enums.Visibility.collapse;
 
     public choose(args) {
         let item = this.source[args.index];
@@ -66,6 +72,9 @@ export class FilterableListpicker extends GridLayout {
     }
     
     public hide() {
+        let textField: TextField = frame.topmost().getViewById('filterTextField');
+        if (textField.dismissSoftInput) textField.dismissSoftInput();
+        textField.text = '';
         let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
         let picker: StackLayout = frame.topmost().getViewById('dc_flp') as StackLayout;
         if (this.blurView) {
@@ -88,8 +97,7 @@ export class FilterableListpicker extends GridLayout {
             curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
         }).then(() => {
             if (isIOS) {
-                let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
-                parent.visibility = "collapse";
+                this.visibility = enums.Visibility.collapse;
             }
             container.visibility = 'collapse';
         })
@@ -99,8 +107,7 @@ export class FilterableListpicker extends GridLayout {
         let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
         let picker: StackLayout = frame.topmost().getViewById('dc_flp') as StackLayout;
         if (isIOS) {
-            let parent: any = frame.topmost().getViewById('dc_flp_container').parent;
-            parent.visibility = "visible";
+            this.visibility = enums.Visibility.visible;
         }
         container.visibility = 'visible';
 

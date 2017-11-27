@@ -25,4 +25,9 @@ export class HelloWorldModel extends Observable {
     showPicker() {
         frame.topmost().getViewById('myfilter').show();
     }
+
+    showNewThings() {
+        this.set('listitems', ['hi', 'its', 'dave']);
+        frame.topmost().getViewById('myfilter').show();
+    }
 }
