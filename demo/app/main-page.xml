@@ -9,6 +9,6 @@
                 <Button text="Pick Something Else" tap="{{showNewThings}}" height="50" width="200" style="background-color: rgba(0,0,0,0.7); color: white; border-radius: 25;"/>
             </StackLayout>
         </GridLayout>
-        <ui:FilterableListpicker id="myfilter" blur="dark" dimmerColor="rgba(76,196,211,0.7)" hintText="Type to filter..." source="{{listitems}}" canceled="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
+        <ui:FilterableListpicker focusOnShow="false" id="myfilter" blur="dark" listHeight="400" dimmerColor="rgba(76,196,211,0.7)" hintText="Type to filter..." source="{{listitems}}" canceled="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
     </GridLayout>
 </Page>

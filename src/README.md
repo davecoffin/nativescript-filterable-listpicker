@@ -98,6 +98,7 @@ The UI element accepts the following parameters:
 | hintText | Enter text to filter... | This is the text that shows up as the hint for the textfield used to filter the list. |
 | listWidth | 300 | The width of the modal element. |
 | listHeight | 300 | The height of the modal element. |
+| focusOnShow | false | true or false, indicating if the textfield should be in focus (and the keyboard open) when the listpicker is shown. |
 | dimmerColor | rgba(0,0,0,0.8) | The color of the dimmer behind the modal. You can set it to `transparent`, or any color supported by NativeScript (ex: `rgba(255,255,255,0.5)`, `red`, `#0088CC`) |
 | blur | none | iOS only. Pass `dark` or `light` for a dark or light blur effect. If this is passed, dimmerColor is ignored on iOS but respected on Android. |
 | itemTapped(args) |  | This is the function called when an item in the list is tapped. The modal is automically dismissed, and you can access to item tapped with `args.selectedItem`. |

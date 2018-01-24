@@ -18,6 +18,8 @@ export const listWidthProperty = new Property<FilterableListpicker, string>({ na
 export const listHeightProperty = new Property<FilterableListpicker, string>({ name: "listHeight", defaultValue: '300' });
 export const dimmerColorProperty = new Property<FilterableListpicker, string>({ name: "dimmerColor", defaultValue: 'rgba(0,0,0,0.8)' });
 export const blurProperty = new Property<FilterableListpicker, string>({ name: "blur", defaultValue: 'none' });
+export const focusOnShowProperty = new Property<FilterableListpicker, boolean>({ name: "focusOnShow", defaultValue: false });
+export const hideFilterProperty = new Property<FilterableListpicker, boolean>({ name: "hideFilter", defaultValue: false });
 export const hintTextProperty = new Property<FilterableListpicker, string>({ name: "hintText", defaultValue: 'Enter text to filter...' });
 export const sourceProperty = new Property<FilterableListpicker, ObservableArray<string>>({ name: "source", defaultValue: undefined, affectsLayout: true, valueChanged: (target, oldValue, newValue) => {
     if (!filtering) {
@@ -34,7 +36,7 @@ export class FilterableListpicker extends GridLayout {
         let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
         innerComponent.bindingContext = this;
         this.addChild(innerComponent);
-        let textfield: TextField = innerComponent.getViewById('filterTextField')
+        let textfield: TextField = <TextField>innerComponent.getViewById('filterTextField')
         textfield.on('textChange', (data: any) => {
             filtering = true;
             this.source = unfilteredSource.filter(item => {
@@ -48,8 +50,10 @@ export class FilterableListpicker extends GridLayout {
     public source: any;
     public dimmerColor: any;
     public hintText: any;
+    public hideFilter: any;
     public blur: any;    
     private blurView: any = false;
+    public focusOnShow: any;
 
     visibility:any = enums.Visibility.collapse;
 
@@ -72,7 +76,7 @@ export class FilterableListpicker extends GridLayout {
     }
     
     public hide() {
-        let textField: TextField = frame.topmost().getViewById('filterTextField');
+        let textField: TextField = <TextField>frame.topmost().getViewById('filterTextField');
         if (textField.dismissSoftInput) textField.dismissSoftInput();
         textField.text = '';
         let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
@@ -96,19 +100,16 @@ export class FilterableListpicker extends GridLayout {
             duration: 400,
             curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
         }).then(() => {
-            if (isIOS) {
-                this.visibility = enums.Visibility.collapse;
-            }
+            this.visibility = enums.Visibility.collapse;
             container.visibility = 'collapse';
         })
     }
 
     public show() {
+        
         let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
         let picker: StackLayout = frame.topmost().getViewById('dc_flp') as StackLayout;
-        if (isIOS) {
-            this.visibility = enums.Visibility.visible;
-        }
+        this.visibility = enums.Visibility.visible;
         container.visibility = 'visible';
 
         if (isIOS && this.blur && this.blur != 'none') {
@@ -144,12 +145,18 @@ export class FilterableListpicker extends GridLayout {
             duration: 400,
             curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
         })
+
+        let textField: TextField = <TextField>frame.topmost().getViewById('filterTextField');
+        if (JSON.parse(this.focusOnShow)) textField.focus();
+        
     }
 }
 
 listWidthProperty.register(FilterableListpicker);
 listHeightProperty.register(FilterableListpicker);
 dimmerColorProperty.register(FilterableListpicker);
+focusOnShowProperty.register(FilterableListpicker);
+hideFilterProperty.register(FilterableListpicker);
 blurProperty.register(FilterableListpicker);
 hintTextProperty.register(FilterableListpicker);
 sourceProperty.register(FilterableListpicker);
