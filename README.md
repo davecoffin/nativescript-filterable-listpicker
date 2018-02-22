@@ -4,7 +4,7 @@
 
 The native listpickers on iOS and Android are not great for huge lists that users may want to filter. This plugin is a modal that offers filtering capabilities.
 
-<img src="https://github.com/davecoffin/nativescript-filterable-listpicker/blob/master/assets/filterablelist.gif?raw=true" height="600" > 
+<img src="https://cl.ly/pj0N/Screen%20Recording%202018-02-22%20at%2010.17%20AM.gif" height="600" > 
 
 
 ## Installation
@@ -88,13 +88,54 @@ showPicker() {
 
 Note: You can change the items in the filterable list easily by just setting the source to an array in your observable, and changing then changing the array. Take a look at the demo project for an example.
 
+### Source Array
+As of version 2.0, you can supply either an array of strings, or an array of objects. The object must contain a parameter called `title`, and thats what will display as the title. Check out the gif above to see what the picker looks like when supplying an object. The 3 parameters the picker will display
+if in your object are:
+
+| Property | Description|
+| --- | --- |
+| title | The title, this is what your list will be filtered on, and it will display in bold. |
+| image | OPTIONAL: This will display to the left of the title. |
+| description | OPTIONAL: This will display under the title smaller and in gray. |
+
+Here's some example code:
+```
+public listitems = [
+    {
+        "image": "https://lh3.googleusercontent.com/gN6iBKP1b2GTXZZoCxhyXiYIAh8QJ_8xzlhEK6csyDadA4GdkEdIEy9Bc8s5jozt1g=w300",
+        "title": "Brown Bear",
+        "description": "Brown bear brown bear, what do you see?"
+    },
+    {
+        "image": "http://icons.veryicon.com/png/Flag/Rounded%20World%20Flags/Indonesia%20Flag.png",
+        "title": "Red Bird"
+    },
+    {
+        "title": "Purple Cat",
+        "description": "Why are we teaching kids there are purple cats?"
+    }
+];
+
+```
+
+You could, for example, massage the results of an API call and use the result array of objects to display in the picker. Other parameters can be present in the objects in the array (like IDs for example), the picker will use `title`, `image` and `description` if they are present. Although `title` must be present. 
+
+Here's how it will look in the picker:
+
+<img src="https://cl.ly/phhb/Screen%20Shot%202018-02-22%20at%209.46.13%20AM.png" width="400">
+
+
+### Webpack
+Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts. See more <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
+
+
 ## API
 
 The UI element accepts the following parameters:
     
 | Property | Default | Description |
 | --- | --- | --- |
-| source | REQUIRED | The array of strings you want to display in the picker. |
+| source | REQUIRED | The array of strings or objects (see Source Array above) you want to display in the picker. |
 | hintText | Enter text to filter... | This is the text that shows up as the hint for the textfield used to filter the list. |
 | listWidth | 300 | The width of the modal element. |
 | listHeight | 300 | The height of the modal element. |
