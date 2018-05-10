@@ -2,17 +2,17 @@
   "nativescript": {
     "id": "org.nativescript.demo",
     "tns-android": {
-      "version": "3.1.1"
+      "version": "4.0.1"
     },
     "tns-ios": {
-      "version": "3.3.0"
+      "version": "4.0.1"
     }
   },
   "dependencies": {
     "nativescript-filterable-listpicker": "../src",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-unit-test-runner": "^0.3.4",
-    "tns-core-modules": "^3.1.1"
+    "tns-core-modules": "^4.0.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "~3.1.3",
