@@ -43,9 +43,9 @@ export class FilterableListpicker extends GridLayout {
                         <ListView.itemTemplate>
                             <StackLayout>
                                 <GridLayout columns="auto, *" visibility="{{title ? 'visible' : 'collapsed'}}">
-                                    <Image src="{{image ? image : ''}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" style="margin: 10 0 10 5;"></Image>
+                                    <Image src="{{image ? image : 'https://davecoffin.com/images/expert_badge.png'}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" style="margin: 10 0 10 5;"></Image>
                                     <StackLayout style="margin: 10 10 10 5;" col="1" verticalAlignment="middle">
-                                        <Label text="{{title}}" textWrap="true" style="font-weight: bold; font-size: 16;"></Label>
+                                        <Label text="{{title ? title : ''}}" textWrap="true" style="font-weight: bold; font-size: 16;"></Label>
                                         <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" style="color: gray; font-size: 13;"></Label>
                                     </StackLayout>
                                 </GridLayout>
@@ -84,6 +84,7 @@ export class FilterableListpicker extends GridLayout {
     public blur: any;    
     private blurView: any = false;
     public focusOnShow: any;
+    public viewContainer: any;
 
     visibility:any = enums.Visibility.collapse;
 
@@ -106,11 +107,11 @@ export class FilterableListpicker extends GridLayout {
     }
     
     public hide() {
-        let textField: TextField = <TextField>frame.topmost().getViewById('filterTextField');
+        let textField: TextField = <TextField>this.viewContainer.getViewById('filterTextField');
         if (textField.dismissSoftInput) textField.dismissSoftInput();
         textField.text = '';
-        let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
-        let picker: StackLayout = frame.topmost().getViewById('dc_flp') as StackLayout;
+        let container: GridLayout = this.viewContainer.getViewById('dc_flp_container') as GridLayout;
+        let picker: StackLayout = this.viewContainer.getViewById('dc_flp') as StackLayout;
         if (this.blurView) {
             UIView.animateWithDurationAnimationsCompletion(.3, () => {
                 this.blurView.effect = null;
@@ -121,7 +122,7 @@ export class FilterableListpicker extends GridLayout {
             container.animate({
                 opacity: 0,
                 duration: 200
-            })
+            }).then(_ => {}, err => {})
         }
 
         return picker.animate({
@@ -132,13 +133,16 @@ export class FilterableListpicker extends GridLayout {
         }).then(() => {
             this.visibility = enums.Visibility.collapse;
             container.visibility = 'collapse';
-        })
+        }, err => {})
     }
 
-    public show() {
-        
-        let container: GridLayout = frame.topmost().getViewById('dc_flp_container') as GridLayout;
-        let picker: StackLayout = frame.topmost().getViewById('dc_flp') as StackLayout;
+    public show(viewContainer?) {
+        this.viewContainer = frame.topmost();
+        if (viewContainer) {
+            this.viewContainer = viewContainer;
+        }
+        let container: GridLayout = this.viewContainer.getViewById('dc_flp_container') as GridLayout;
+        let picker: StackLayout = this.viewContainer.getViewById('dc_flp') as StackLayout;
         this.visibility = enums.Visibility.visible;
         container.visibility = 'visible';
 
@@ -163,7 +167,7 @@ export class FilterableListpicker extends GridLayout {
             container.animate({
                 opacity: 1,
                 duration: 200
-            })
+            }).then(_ => {}, err => {})
         }
 
         picker.scaleX = .7;
@@ -174,9 +178,9 @@ export class FilterableListpicker extends GridLayout {
             opacity: 1,
             duration: 400,
             curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
-        })
+        }).then(_ => {}, err => {})
 
-        let textField: TextField = <TextField>frame.topmost().getViewById('filterTextField');
+        let textField: TextField = <TextField>this.viewContainer.getViewById('filterTextField');
         if (JSON.parse(this.focusOnShow)) textField.focus();
         
     }

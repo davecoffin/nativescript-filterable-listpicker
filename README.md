@@ -86,6 +86,18 @@ showPicker() {
 }
 ```
 
+Note: When calling show, as of 2.1.0 you can pass in a viewContainer that the plugin will use to find the necessary elements. This allows you to
+use the list picker in modals now! For example, you could pass in a Page element, or a GridLayout that contains the FilterableListpicker element like this:
+
+in android:
+```
+@ViewChild('myContainer') myContainer: ElementRef;
+
+public function showPicker() {
+  this.myfilter.nativeElement.show(this.myContainer.nativeElement);
+}
+```
+
 Note: You can change the items in the filterable list easily by just setting the source to an array in your observable, and changing then changing the array. Take a look at the demo project for an example.
 
 ### Source Array

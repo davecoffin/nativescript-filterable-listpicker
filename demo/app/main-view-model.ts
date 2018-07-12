@@ -68,11 +68,11 @@ export class HelloWorldModel extends Observable {
 
     showPicker() {
         this.set('listitems', this.languages);
-        frame.topmost().getViewById('myfilter').show();
+        frame.topmost().getViewById('myfilter').show(frame.topmost());
     }
 
     showNewThings() {
         this.set('listitems', this.objArray);
-        frame.topmost().getViewById('myfilter').show();
+        frame.topmost().getViewById('myfilter').show(frame.topmost());
     }
 }
