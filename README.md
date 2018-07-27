@@ -138,8 +138,29 @@ Here's how it will look in the picker:
 
 
 ### Webpack
-Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts. See more <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
+Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts.
 
+1. Create the file `bundle-config.js` in your app folder.
+2. Add the following code:
+
+```
+if (global.TNS_WEBPACK) {
+    // registers tns-core-modules UI framework modules
+    require("bundle-entry-points");
+    
+    // register application modules
+    // This will register each `page` postfixed xml, css, js, ts, scss etc. in the app/ folder
+    const context = require.context("~/", true, /(page|fragment)\.(xml|css|js|ts|scss|less|sass)$/);
+    global.registerWebpackModules(context);
+}
+
+```
+3. Import the `bundle-config.js` in your `app.module.ts`
+```
+import "./bundle-config";
+```
+
+For more info see <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
 
 ## API
 
