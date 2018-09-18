@@ -44,6 +44,13 @@
         "name": "Dave Coffin",
         "email": "dave@davecoffin.com"
     },
+    "contributors": [
+        {
+            "name": "Nathanael Walker",
+            "email": "walkerrunpdx@gmail.com",
+            "url": "https://github.com/NathanWalker"
+        }
+    ],
     "repository": {
         "url": "https://github.com/davecoffin/nativescript-filterable-listpicker",
         "type": "git"
