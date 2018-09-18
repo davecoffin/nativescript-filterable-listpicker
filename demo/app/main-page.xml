@@ -9,6 +9,7 @@
                 <Label text="{{selection ? 'I chose ' + selection : ''}}" textWrap="true" style="font-size: 30; text-align: center; margin-top: 50; font-weight: bold; color: white;" />
             </StackLayout>
         </GridLayout>
-        <ui:FilterableListpicker focusOnShow="false" id="myfilter" blur="dark" dimmerColor="rgba(76,196,211,0.7)" hintText="Type to filter..." source="{{listitems}}" canceled="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
+        <!-- props to tes: enableSearch="false" showCancel="false" -->
+        <ui:FilterableListpicker focusOnShow="false" id="myfilter" blur="dark" dimmerColor="rgba(76,196,211,0.7)"  hintText="Type to filter..." source="{{listitems}}" canceled="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
     </GridLayout>
 </Page>
