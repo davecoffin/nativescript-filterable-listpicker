@@ -1,7 +1,7 @@
 
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 
-import { View, Property } from "tns-core-modules/ui/core/view";
+import { View, Property, booleanConverter } from "tns-core-modules/ui/core/view";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from 'tns-core-modules/ui/layouts/grid-layout';
 import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout';
@@ -15,6 +15,16 @@ let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
 export const listWidthProperty = new Property<FilterableListpicker, string>({ name: "listWidth", defaultValue: '300' });
 export const listHeightProperty = new Property<FilterableListpicker, string>({ name: "listHeight", defaultValue: '300' });
+export const enableSearchProperty = new Property<FilterableListpicker, boolean>({ 
+  name: "enableSearch", 
+  defaultValue: true,
+  valueConverter: booleanConverter
+});
+export const showCancelProperty = new Property<FilterableListpicker, boolean>({ 
+  name: "showCancel", 
+  defaultValue: true,
+  valueConverter: booleanConverter
+});
 export const dimmerColorProperty = new Property<FilterableListpicker, string>({ name: "dimmerColor", defaultValue: 'rgba(0,0,0,0.8)' });
 export const blurProperty = new Property<FilterableListpicker, string>({ name: "blur", defaultValue: 'none' });
 export const focusOnShowProperty = new Property<FilterableListpicker, boolean>({ name: "focusOnShow", defaultValue: false });
@@ -32,36 +42,43 @@ export const sourceProperty = new Property<FilterableListpicker, ObservableArray
 export class FilterableListpicker extends GridLayout {
     constructor() {
         super();
-        //let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
-        let innerComponent;
-        innerComponent = builder.parse(`
-            <GridLayout id="dc_flp_container" visibility="collapsed">
-                <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
-                <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="40, auto, 40" id="dc_flp" style="border-radius: 10;">
-                    <TextField hint="{{hintText}}" row="0" text="{{filterText}}" id="filterTextField" style="padding: 10 15; height: 40; background-color: #E0E0E0; border-radius: 10 10 0 0;"></TextField>
-                    <ListView items="{{ source }}" row="1" height="{{listHeight}}" itemTap="{{choose}}" style="background-color: white;">
-                        <ListView.itemTemplate>
-                            <StackLayout>
-                                <GridLayout columns="auto, *" visibility="{{title ? 'visible' : 'collapsed'}}">
-                                    <Image src="{{image ? image : 'https://davecoffin.com/images/expert_badge.png'}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" style="margin: 10 0 10 5;"></Image>
-                                    <StackLayout style="margin: 10 10 10 5;" col="1" verticalAlignment="middle">
-                                        <Label text="{{title ? title : ''}}" textWrap="true" style="font-weight: bold; font-size: 16;"></Label>
-                                        <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" style="color: gray; font-size: 13;"></Label>
-                                    </StackLayout>
-                                </GridLayout>
-                                <Label text="{{$value}}" textWrap="true" style="margin-left: 15; padding: 10 0;" visibility="{{title ? 'collapsed' : 'visible'}}"></Label>
-                            </StackLayout>
-                        </ListView.itemTemplate>
-                    </ListView>
-                    <StackLayout row="2" height="40" style="background-color: #E0E0E0; height: 40; border-radius: 0 0 10 10;">
-                        <Button text="Cancel" tap="{{cancel}}" verticalAlignment="middle" style="font-weight: bold; height: 40; background-color: transparent; background-color: transparent; border-color: transparent; border-width: 1; font-size: 12;"></Button>    
-                    </StackLayout>
-                </GridLayout>
-            </GridLayout>`
-        );
-        innerComponent.bindingContext = this;
-        this.addChild(innerComponent);
-        let textfield: TextField = <TextField>innerComponent.getViewById('filterTextField')
+        
+    }
+
+    onLoaded() {
+      super.onLoaded();
+      //let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
+      let innerComponent = builder.parse(`
+          <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed">
+              <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
+              <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="40, auto, 40" id="dc_flp" class="flp-list-container">
+                  <TextField hint="{{hintText}}" row="0" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}"></TextField>
+                  <ListView items="{{ source }}" row="1" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview">
+                      <ListView.itemTemplate>
+                          <StackLayout class="flp-row">
+                              <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
+                                  <Image src="{{image ? image : 'https://davecoffin.com/images/expert_badge.png'}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
+                                  <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
+                                      <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
+                                      <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="flp-description"></Label>
+                                  </StackLayout>
+                                  <Label col="2" text="{{selected ? selected : ''}}" class="flp-item-selected" visibility="{{selected ? 'visible' : 'collapsed'}}"></Label>
+                              </GridLayout>
+                              <Label text="{{$value}}" textWrap="true" class="flp-no-title" visibility="{{title ? 'collapsed' : 'visible'}}"></Label>
+                          </StackLayout>
+                      </ListView.itemTemplate>
+                  </ListView>
+                  <StackLayout row="2" height="40" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapsed'}}">
+                      <Button text="Cancel" tap="{{cancel}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>    
+                  </StackLayout>
+              </GridLayout>
+          </GridLayout>`
+      );
+      innerComponent.bindingContext = this;
+      this.addChild(innerComponent);
+
+      if (this.enableSearch) {
+        let textfield: TextField = <TextField>this.getViewById('filterTextField')
         textfield.on('textChange', (data: any) => {
             filtering = true;
             this.source = unfilteredSource.filter(item => {
@@ -73,7 +90,8 @@ export class FilterableListpicker extends GridLayout {
                 
             })
             filtering = false;
-        })
+        });
+      }
     }
     public static canceledEvent = "canceled";
     public static itemTappedEvent = "itemTapped";
@@ -81,6 +99,7 @@ export class FilterableListpicker extends GridLayout {
     public dimmerColor: any;
     public hintText: any;
     public hideFilter: any;
+    public enableSearch: boolean;
     public blur: any;    
     private blurView: any = false;
     public focusOnShow: any;
@@ -107,9 +126,11 @@ export class FilterableListpicker extends GridLayout {
     }
     
     public hide() {
+      if (this.enableSearch) {
         let textField: TextField = <TextField>this.viewContainer.getViewById('filterTextField');
         if (textField.dismissSoftInput) textField.dismissSoftInput();
         textField.text = '';
+      }
         let container: GridLayout = this.viewContainer.getViewById('dc_flp_container') as GridLayout;
         let picker: StackLayout = this.viewContainer.getViewById('dc_flp') as StackLayout;
         if (this.blurView) {
@@ -180,14 +201,18 @@ export class FilterableListpicker extends GridLayout {
             curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
         }).then(_ => {}, err => {})
 
-        let textField: TextField = <TextField>this.viewContainer.getViewById('filterTextField');
-        if (JSON.parse(this.focusOnShow)) textField.focus();
+        if (this.enableSearch) {
+          let textField: TextField = <TextField>this.viewContainer.getViewById('filterTextField');
+          if (JSON.parse(this.focusOnShow)) textField.focus();
+        }
         
     }
 }
 
 listWidthProperty.register(FilterableListpicker);
 listHeightProperty.register(FilterableListpicker);
+enableSearchProperty.register(FilterableListpicker);
+showCancelProperty.register(FilterableListpicker);
 dimmerColorProperty.register(FilterableListpicker);
 focusOnShowProperty.register(FilterableListpicker);
 hideFilterProperty.register(FilterableListpicker);

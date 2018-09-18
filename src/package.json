@@ -1,6 +1,6 @@
 {
     "name": "nativescript-filterable-listpicker",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "A modal list picker with filtering capabilities.",
     "main": "filterable-listpicker",
     "typings": "index.d.ts",
@@ -18,21 +18,20 @@
         }
     },
     "scripts": {
-        "tsc": "tsc -skipLibCheck",
+        "tsc": "tsc",
         "build": "npm i && tsc",
-        "postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && cd ../src && npm run plugin.link",
+        "postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && cd ../src",
         "test.android": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
         "test.ios": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
         "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
-        "plugin.link": "npm link && cd ../demo && npm link nativescript-filterable-listpicker && cd ../src",
         "plugin.tscwatch": "npm run tsc -- -w",
-        "demo.ios": "npm i && npm run tsc && cd ../demo && tns run ios --syncAllFiles",
-        "debug.ios": "npm i && npm run tsc && cd ../demo && tns debug ios --syncAllFiles",
-        "demo.android": "npm i && npm run tsc && cd ../demo && tns run android --syncAllFiles",
-        "debug.android": "npm i && npm run tsc && cd ../demo && tns debug android --syncAllFiles",
-        "demo.reset": "cd ../demo && rimraf platforms",
-        "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove nativescript-filterable-listpicker && tns plugin add ../src",
-        "clean": "cd ../demo && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules && npm run plugin.link",
+        "demo.ios": "npm run tsc && cd ../demo && tns run ios --syncAllFiles --emulator",
+        "debug.ios": "npm run tsc && cd ../demo && tns debug ios --syncAllFiles --emulator",
+        "demo.android": "npm run tsc && cd ../demo && tns run android --syncAllFiles",
+        "debug.android": "npm run tsc && cd ../demo && tns debug android --syncAllFiles",
+        "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
+        "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove nativescript-filterable-listpicker && tns plugin add ../src && npx rimraf -- package-lock.json",
+        "clean": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json && cd ../src && npx rimraf -- node_modules",
         "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'"
     },
     "keywords": [
@@ -56,12 +55,12 @@
     "homepage": "https://github.com/davecoffin/nativescript-filterable-listpicker",
     "readmeFilename": "README.md",
     "devDependencies": {
-        "tns-core-modules": "^3.1.0",
-        "tns-platform-declarations": "^3.1.0",
-        "typescript": "~2.3.0",
+        "tns-core-modules": "^4.2.0",
+        "tns-platform-declarations": "^4.2.0",
+        "typescript": "~2.9.0",
         "prompt": "^1.0.0",
         "rimraf": "^2.5.0",
-        "tslint": "^5.0.0"
+        "tslint": "^5.11.0"
     },
     "dependencies": {},
     "bootstrapper": "nativescript-plugin-seed"

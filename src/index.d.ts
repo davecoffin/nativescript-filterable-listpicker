@@ -18,6 +18,7 @@ export declare class FilterableListpicker extends GridLayout {
     hintText: any;
     hideFilter: any;
     blur: any;
+    enableSearch: boolean;
     private blurView;
     focusOnShow: any;
     visibility: any;
