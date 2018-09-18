@@ -52,10 +52,10 @@ export class FilterableListpicker extends GridLayout {
       let innerComponent = builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed">
               <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
-              <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, 40, auto, 40" id="dc_flp" class="flp-list-container">
+              <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container">
                   <Label row="0" text="{{headingTitle ? headingTitle : ''}}" class="flp-heading-title" visibility="{{headingTitle ? 'visible' : 'collapsed'}}"></Label>
                   <TextField hint="{{hintText}}" row="1" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}"></TextField>
-                  <ListView items="{{ source }}" row="1" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview">
+                  <ListView items="{{ source }}" row="2" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview">
                       <ListView.itemTemplate>
                           <StackLayout class="flp-row">
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
@@ -70,7 +70,7 @@ export class FilterableListpicker extends GridLayout {
                           </StackLayout>
                       </ListView.itemTemplate>
                   </ListView>
-                  <StackLayout row="2" height="40" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapsed'}}">
+                  <StackLayout row="3" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapsed'}}">
                       <Button text="Cancel" tap="{{cancel}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>    
                   </StackLayout>
               </GridLayout>
