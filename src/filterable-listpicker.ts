@@ -15,6 +15,7 @@ let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
 export const listWidthProperty = new Property<FilterableListpicker, string>({ name: "listWidth", defaultValue: '300' });
 export const listHeightProperty = new Property<FilterableListpicker, string>({ name: "listHeight", defaultValue: '300' });
+export const headingTitleProperty = new Property<FilterableListpicker, string>({ name: "headingTitle", defaultValue: undefined });
 export const enableSearchProperty = new Property<FilterableListpicker, boolean>({ 
   name: "enableSearch", 
   defaultValue: true,
@@ -51,8 +52,9 @@ export class FilterableListpicker extends GridLayout {
       let innerComponent = builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed">
               <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
-              <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="40, auto, 40" id="dc_flp" class="flp-list-container">
-                  <TextField hint="{{hintText}}" row="0" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}"></TextField>
+              <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, 40, auto, 40" id="dc_flp" class="flp-list-container">
+                  <Label row="0" text="{{headingTitle ? headingTitle : ''}}" class="flp-heading-title" visibility="{{headingTitle ? 'visible' : 'collapsed'}}"></Label>
+                  <TextField hint="{{hintText}}" row="1" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}"></TextField>
                   <ListView items="{{ source }}" row="1" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview">
                       <ListView.itemTemplate>
                           <StackLayout class="flp-row">
@@ -211,6 +213,7 @@ export class FilterableListpicker extends GridLayout {
 
 listWidthProperty.register(FilterableListpicker);
 listHeightProperty.register(FilterableListpicker);
+headingTitleProperty.register(FilterableListpicker);
 enableSearchProperty.register(FilterableListpicker);
 showCancelProperty.register(FilterableListpicker);
 dimmerColorProperty.register(FilterableListpicker);
