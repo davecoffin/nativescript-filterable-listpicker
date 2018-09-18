@@ -7,6 +7,12 @@
 .flp-container .flp-list-container {
   border-radius: 10;
 }
+.flp-container .flp-heading-title {
+  font-size: 12;
+  text-align: center;
+  background-color: yellow;
+  padding: 10;
+}
 .flp-container .flp-list-container .flp-listview {
   background-color: white;
 }
