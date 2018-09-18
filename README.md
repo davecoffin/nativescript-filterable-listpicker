@@ -138,29 +138,8 @@ Here's how it will look in the picker:
 
 
 ### Webpack
-Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts.
+Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts. See more <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
 
-1. Create the file `bundle-config.js` in your app folder.
-2. Add the following code:
-
-```
-if (global.TNS_WEBPACK) {
-    // registers tns-core-modules UI framework modules
-    require("bundle-entry-points");
-    
-    // register application modules
-    // This will register each `page` postfixed xml, css, js, ts, scss etc. in the app/ folder
-    const context = require.context("~/", true, /(page|fragment)\.(xml|css|js|ts|scss|less|sass)$/);
-    global.registerWebpackModules(context);
-}
-
-```
-3. Import the `bundle-config.js` in your `app.module.ts`
-```
-import "./bundle-config";
-```
-
-For more info see <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
 
 ## API
 
@@ -177,6 +156,70 @@ The UI element accepts the following parameters:
 | blur | none | iOS only. Pass `dark` or `light` for a dark or light blur effect. If this is passed, dimmerColor is ignored on iOS but respected on Android. |
 | itemTapped(args) |  | This is the function called when an item in the list is tapped. The modal is automically dismissed, and you can access to item tapped with `args.selectedItem`. |
 | canceled |  | This is just a function to call if the user cancels, probably rarely neccessary. |
+| showCancel |  | Show cancel button or not. |
+| enableSearch |  | Allow searching by showing the TextField at the top. |
+
+## CSS Styling
+
+```css
+.flp-container .flp-list-container {
+  border-radius: 10;
+}
+.flp-container .flp-list-container .flp-listview {
+  background-color: white;
+}
+
+.flp-container .flp-list-container .flp-listview .flp-row {
+  background-color: white;
+}
+/* .flp-container .flp-list-container .flp-listview .flp-row .flp-row-container {
+  padding: 10;
+} */
+.flp-container .flp-list-container .flp-listview .flp-row .flp-image {
+  margin: 10 0 10 5;
+}
+.flp-container .flp-list-container .flp-listview .flp-row .flp-title-container {
+  margin: 10 10 10 5;
+  /* margin: 0 10 0 10; */
+}
+.flp-container .flp-list-container .flp-listview .flp-row .flp-title-container .flp-title {
+  font-weight: bold; 
+  font-size: 16;
+}
+.flp-container .flp-list-container .flp-listview .flp-row .flp-title-container .flp-description {
+  color: gray; 
+  font-size: 13;
+}
+.flp-container .flp-list-container .flp-listview .flp-row .flp-title-container .flp-no-title {
+  margin-left: 15; 
+  padding: 10 0;
+}
+.flp-container .flp-list-container .flp-listview .flp-row .flp-item-selected {
+  color: lightblue;
+}
+
+.flp-container .flp-hint-field {
+  padding: 10 15; 
+  height: 40; 
+  background-color: #E0E0E0; 
+  border-radius: 10 10 0 0;
+}
+
+.flp-container .flp-cancel-container {
+  background-color: #E0E0E0; 
+  height: 40; 
+  border-radius: 0 0 10 10;
+}
+
+.flp-container .flp-cancel-container .flp-btn-cancel {
+  font-weight: bold; 
+  height: 40; 
+  background-color: transparent; 
+  border-color: transparent; 
+  border-width: 1; 
+  font-size: 12;
+}
+```
 
     
 ## License
