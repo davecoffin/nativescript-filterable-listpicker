@@ -7,9 +7,11 @@
         "noLib": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "skipLibCheck": true,
         "lib": [
-            "es6",
-            "dom"
+          "es2017",
+          "dom",
+          "es6"
         ],
         "pretty": true,
         "allowUnreachableCode": false,
