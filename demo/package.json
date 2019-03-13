@@ -12,7 +12,7 @@
     "nativescript-filterable-listpicker": "file:../src",
     "nativescript-theme-core": "^1.0.4",
     "nativescript-unit-test-runner": "^0.3.4",
-    "tns-core-modules": "^4.0.0"
+    "tns-core-modules": "^5.2.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "~3.1.3",
@@ -29,10 +29,10 @@
     "lazy": "1.0.11",
     "nativescript-css-loader": "~0.26.0",
     "nativescript-dev-typescript": "libs",
-    "nativescript-dev-webpack": "^0.7.3",
+    "nativescript-dev-webpack": "^0.20.0",
     "raw-loader": "~0.5.1",
     "resolve-url-loader": "~2.1.0",
-    "tns-platform-declarations": "^3.1.0",
+    "tns-platform-declarations": "^5.2.0",
     "tslint": "~5.4.3",
     "typescript": "~2.3.0",
     "webpack": "~3.2.0",
