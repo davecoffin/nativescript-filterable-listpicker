@@ -16,6 +16,7 @@ export class HelloWorldModel extends Observable {
     constructor(page: Page) {
         super();
         this.page = page;
+        this.filterableListpicker = (<any>this.page.getViewById('myfilter'));
         MyModel = this;
     }
     
@@ -75,17 +76,20 @@ export class HelloWorldModel extends Observable {
     }
 
     showPicker() {
+        this.filterableListpicker.isAutocomplete = false;
         this.set('listitems', this.languages);
-        (<any>this.page.getViewById('myfilter')).show(frame.topmost());
+        this.filterableListpicker.show(frame.topmost());
     }
 
     showNewThings() {
+        this.filterableListpicker.isAutocomplete = false;
+        console.log(this.filterableListpicker.isAutocomplete)
         this.set('listitems', this.objArray);
         (<any>this.page.getViewById('myfilter')).show(frame.topmost());
     }
 
     showPickerAsAutocomplete() {
-        this.filterableListpicker = (<any>this.page.getViewById('myfilter'));
+        this.filterableListpicker.isAutocomplete = true;
         this.filterableListpicker.show(frame.topmost());
     
         this.filterableListpicker.autocomplete((data) => {
