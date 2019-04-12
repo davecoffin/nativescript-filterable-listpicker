@@ -3,13 +3,15 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 import {
   View,
   Property,
-  booleanConverter
+  booleanConverter,
+  PropertyChangeData
 } from "tns-core-modules/ui/core/view";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 import { isIOS } from "tns-core-modules/platform";
 import * as enums from "tns-core-modules/ui/enums";
+
 let builder = require("tns-core-modules/ui/builder");
 
 let unfilteredSource: Array<any> = [];
@@ -127,6 +129,7 @@ export class FilterableListpicker extends GridLayout {
   private _picker: GridLayout;
   private _textField: TextField;
   private _searchFilter: (data: any) => void;
+  private _isAutocomplete: boolean = false;
 
   visibility: any = enums.Visibility.collapse;
 
@@ -136,6 +139,25 @@ export class FilterableListpicker extends GridLayout {
 
   loadedInnerContainer(args) {
     this._picker = <GridLayout>args.object;
+  }
+
+  autocomplete(fn: Function) {
+    if(!this.isAutocomplete)
+        return;
+    if(typeof fn !== "function") 
+        throw("[FilterableListPicker]: autotcomplete params must be a Function type !");
+
+    // Init all data
+    unfilteredSource = [];
+    this.source = []; // init
+    this.set("source", this.source)
+    this.notifyPropertyChange("source", this.source);
+    while (unfilteredSource.length) unfilteredSource.pop();
+  
+    // bind custome autocomplete function
+    this._textField.on("textChange", (data: PropertyChangeData) =>{
+        fn(data);
+    })
   }
 
   loadedTextField(args) {
@@ -261,6 +283,19 @@ export class FilterableListpicker extends GridLayout {
       if (JSON.parse(this.focusOnShow)) this._textField.focus();
       this._textField.on("textChange", this._searchFilter);
     }
+  }
+
+  get isAutocomplete(): boolean {
+      return this._isAutocomplete;
+  }
+
+  set isAutocomplete(val: boolean) {
+      if(val === false) {
+        // remve listener for TextField
+        console.log(val)
+        this._textField.off("textChange");
+      }
+      this._isAutocomplete = val;
   }
 
   private _searchFilterFn(data: any) {

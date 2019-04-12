@@ -1,14 +1,22 @@
 import { Observable } from 'tns-core-modules/data/observable';
 import { FilterableListpicker } from 'nativescript-filterable-listpicker';
 import * as frame from "tns-core-modules/ui/frame";
+import { Page } from 'tns-core-modules/ui/frame';
+import * as  http from "tns-core-modules/http";
+    
+let API_KEY = "__YOUR_GOOGLE_API_KEY__";
+let placesApiUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+let placesDetailsApiUrl = 'https://maps.googleapis.com/maps/api/place/details/json'
 let MyModel;
 
 export class HelloWorldModel extends Observable {
     public selection: string;
     private filterableListpicker: FilterableListpicker;
-
-    constructor() {
+    private page: Page;
+    constructor(page: Page) {
         super();
+        this.page = page;
+        this.filterableListpicker = (<any>this.page.getViewById('myfilter'));
         MyModel = this;
     }
     
@@ -59,6 +67,7 @@ export class HelloWorldModel extends Observable {
         } else {
             MyModel.set('selection', args.selectedItem.title);
         }
+        // You can user `https://maps.googleapis.com/maps/api/place/details/json?placeid=${args.selectedItem.place_id}&key=${API_KEY}` for detailed place infos
     }
 
     cancelFilterableList(args) {
@@ -67,12 +76,73 @@ export class HelloWorldModel extends Observable {
     }
 
     showPicker() {
+        this.filterableListpicker.isAutocomplete = false;
         this.set('listitems', this.languages);
-        (<any>frame.topmost().getViewById('myfilter')).show(frame.topmost());
+        this.filterableListpicker.show(frame.topmost());
     }
 
     showNewThings() {
+        this.filterableListpicker.isAutocomplete = false;
+        console.log(this.filterableListpicker.isAutocomplete)
         this.set('listitems', this.objArray);
-        (<any>frame.topmost().getViewById('myfilter')).show(frame.topmost());
+        (<any>this.page.getViewById('myfilter')).show(frame.topmost());
     }
+
+    showPickerAsAutocomplete() {
+        this.filterableListpicker.isAutocomplete = true;
+        this.filterableListpicker.show(frame.topmost());
+    
+        this.filterableListpicker.autocomplete((data) => {
+            let url = `${placesApiUrl}?input=${data.value}&language=fr_FR&key=${API_KEY}`;
+            http.getJSON<Predictions>(url).then((res) => {
+                //console.dir(res)
+                const airportsCollection = res.predictions;
+                const items = [];
+                for (let i = 0; i < airportsCollection.length; i++) {
+                    items.push({
+                        title: airportsCollection[i].description,
+                        description: "",
+                        source: airportsCollection[i]
+                    });
+                    
+                }
+                this.set("listitems", items)
+            }).catch((err) => {
+                const message = 'Error fetching remote data from ' + url + ': ' + err.message;
+                console.log(message);
+                alert(message);
+            });
+        });
+    }
+}
+
+export interface Predictions {
+    predictions: PredictionsItems[];
+}
+
+export interface PredictionsItems {
+    id: string;
+    description: string;
+    place_id: string;
+    reference: string;
+    structured_formatting: StructuredFormattingItems[];
+    types: itemsType[];
+    matched_substrings: MatchedSubstring;
+}
+
+export interface StructuredFormattingItems {
+    main_text: string;
+    main_text_matched_substrings: MatchedSubstring[],
+    secondary_text: string;
+}
+
+export interface itemsType {
+    locality: string;
+    political: string[],
+    geocode: string;
+}
+
+export interface MatchedSubstring {
+    length: number;
+    offset: number;
 }

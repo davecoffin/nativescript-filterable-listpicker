@@ -26,4 +26,7 @@ export declare class FilterableListpicker extends GridLayout {
     cancel(): void;
     hide(page?): Promise<void>;
     show(page?): void;
+    autocomplete(fn: Function): void;
+    get isAutocomplete(): boolean
+    set isAutocomplete(val: boolean):void
 }
