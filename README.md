@@ -54,6 +54,7 @@ public cancelFilterableList() {
 
 ### Use as Autocomplte
 You can use nativescript-filterable-list-picker as autocomplete from your backend server or third party provider like `Google Place API` please see demo
+If you bind source before use `autocomplete` function this resources will be cloned and until the `TextField` is empty the Filterable-listpicker wil be populated with that resources, if you write then the autocomplete take the relay. 
 ```ts
 let API_KEY = "__YOUR_GOOGLE_API_KEY";
 
@@ -207,6 +208,7 @@ The UI element accepts the following parameters:
 | canceled |  | This is just a function to call if the user cancels, probably rarely neccessary. |
 | showCancel |  | Show cancel button or not. |
 | enableSearch |  | Allow searching by showing the TextField at the top. |
+| autocomplete(fn: Function) |  | Allow binding listener `textChangeEvent` to Textfield and use the plugin as `autocomplete` eg.: Google Place API. |
 
 ## CSS Styling
 
