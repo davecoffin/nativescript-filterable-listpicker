@@ -3,13 +3,15 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 import {
   View,
   Property,
-  booleanConverter
+  booleanConverter,
+  PropertyChangeData
 } from "tns-core-modules/ui/core/view";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 import { isIOS } from "tns-core-modules/platform";
 import * as enums from "tns-core-modules/ui/enums";
+
 let builder = require("tns-core-modules/ui/builder");
 
 let unfilteredSource: Array<any> = [];
@@ -127,6 +129,8 @@ export class FilterableListpicker extends GridLayout {
   private _picker: GridLayout;
   private _textField: TextField;
   private _searchFilter: (data: any) => void;
+  private _isAutocomplete: boolean = false;
+  private _suggestions: any;
 
   visibility: any = enums.Visibility.collapse;
 
@@ -136,6 +140,34 @@ export class FilterableListpicker extends GridLayout {
 
   loadedInnerContainer(args) {
     this._picker = <GridLayout>args.object;
+  }
+
+  autocomplete(fn: Function) {
+    if(!this.isAutocomplete)
+        return;
+    if(typeof fn !== "function") 
+        throw("[FilterableListPicker]: autotcomplete params must be a Function type !");
+
+    /**
+     * Populate sources with suggestions if is defined is usefull if we have a most use list
+     * for the moment user can't search into suggestion .. writing into Textfield will active autocomplete
+     * */ 
+    if(!this.source)
+        this.source = [];
+    
+    // Copy suggestion list to bind it when Textfield is empty
+    this._suggestions =  this.source;
+  
+    // bind custome autocomplete function
+    this._textField.on("textChange", (data: PropertyChangeData) => {
+        if(!data.value && this._suggestions.length > 0) {
+            this.set("source", this._suggestions)
+            this.notifyPropertyChange("source", this._suggestions);
+            console.log(this._suggestions);
+            return;
+        }
+        fn(data);
+    })
   }
 
   loadedTextField(args) {
@@ -262,6 +294,19 @@ export class FilterableListpicker extends GridLayout {
       if (JSON.parse(this.focusOnShow)) this._textField.focus();
       this._textField.on("textChange", this._searchFilter);
     }
+  }
+
+  get isAutocomplete(): boolean {
+      return this._isAutocomplete;
+  }
+
+  set isAutocomplete(val: boolean) {
+      if(val === false) {
+        // remve listener for TextField
+        console.log(val)
+        this._textField.off("textChange");
+      }
+      this._isAutocomplete = val;
   }
 
   private _searchFilterFn(data: any) {

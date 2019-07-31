@@ -4,7 +4,7 @@
 
 The native listpickers on iOS and Android are not great for huge lists that users may want to filter. This plugin is a modal that offers filtering capabilities.
 
-<img src="https://cl.ly/pj0N/Screen%20Recording%202018-02-22%20at%2010.17%20AM.gif" height="600" > 
+<img src="https://github.com/kefahB/nativescript-filterable-listpicker/blob/master/assets/filterablelist.gif" height="600" > 
 
 
 ## Installation
@@ -18,21 +18,27 @@ In order to use the plugin, you must place it on your page within a namespace. W
 
 ### NativeScript Core
 	
-```
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="nativescript-filterable-listpicker">
-    <GridLayout>
-        <Image src="res://nicebackgroundimage.jpg" />
-        <StackLayout>
-            <Label text="Whats your favorite programming language?" />
-            <Button text="Choose a Language" tap="{{showPicker}}" />
-        </StackLayout>
-        <ui:FilterableListpicker id="myfilter" blur="dark" hintText="Type to filter..." source="{{listitems}}" cancel="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />
+```xml
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" class="page" xmlns:ui="nativescript-filterable-listpicker">
+    <GridLayout rows="" columns="">
+        <Image src="https://i.pinimg.com/736x/a4/40/04/a4400453bad6d581ec203ad1455d0c8f--pretty-pics-pretty-pictures.jpg" stretch="aspectFill" />    
+        <GridLayout rows="*, auto, *">
+            <StackLayout height="300">
+                <Button text="Pick Your Fav Language" tap="{{showPicker}}" height="50" width="250" style="background-color: rgba(0,0,0,0.7); color: white; border-radius: 25; margin-bottom: 20;margin-bottom:15"/>
+                <Button text="Pick Your Favorite Animal" tap="{{showNewThings}}" height="50" width="250" style="background-color: rgba(0,0,0,0.7); color: white; border-radius: 25;margin-bottom:15"/>
+                <Button text="Use it like Autocomplete" tap="{{showPickerAsAutocomplete}}" height="50" width="250" style="background-color: rgba(0,0,0,0.7); color: white; border-radius: 25;"/>
+
+                <Label text="{{selection ? 'I chose ' + selection : ''}}" textWrap="true" style="font-size: 30; text-align: center; margin-top: 50; font-weight: bold; color: white;" />
+            </StackLayout>
+        </GridLayout>
+        <!-- props to tes: enableSearch="false" showCancel="false" headingTitle="Testing" -->
+        <ui:FilterableListpicker focusOnShow="false" id="myfilter" blur="dark" dimmerColor="rgba(76,196,211,0.7)"  hintText="Type to filter..." source="{{listitems}}" canceled="{{cancelFilterableList}}" itemTapped="{{itemTapped}}" />        
     </GridLayout>
 </Page>
 ```
 
 Then in your code...
-```
+```ts
 public showPicker() {
     page.getViewById('myfilter').show();
 }
@@ -46,11 +52,55 @@ public cancelFilterableList() {
 }
 ```
 
+### Use as Autocomplte
+You can use nativescript-filterable-list-picker as autocomplete from your backend server or third party provider like `Google Place API` please see demo
+If you bind source before use `autocomplete` function this resources will be cloned and until the `TextField` is empty the Filterable-listpicker wil be populated with that resources, if you write then the autocomplete take the relay. 
+```ts
+let API_KEY = "__YOUR_GOOGLE_API_KEY";
+
+private filterableListpicker: FilterableListpicker;
+private page: Page;
+constructor(page: Page) {
+    super();
+    this.page = page;
+    // Get filterableListpicker instance
+    this.filterableListpicker = (<any>this.page.getViewById('myfilter'));
+    MyModel = this;
+}
+
+public showPickerAsAutocomplete() {
+    // IMPORTANT : Set `isAutocomplete` to true to enable `textChange` listener
+    this.filterableListpicker.isAutocomplete = true;
+    this.filterableListpicker.show(frame.topmost());
+    
+    this.filterableListpicker.autocomplete((data) => {
+        let url = placesApiUrl + "?input=" + data.value + "&language=fr_FR&key=" + API_KEY;
+        http.getJSON<Predictions>(url).then((res) => {
+            //console.dir(res)
+            const airportsCollection = res.predictions;
+            const items = [];
+            for (let i = 0; i < airportsCollection.length; i++) {
+                items.push({
+                    title: airportsCollection[i].description,
+                    description: "",
+                    source: airportsCollection[i]
+                });
+                
+            }
+            this.set("listitems", items)
+        }).catch((err) => {
+            const message = 'Error fetching remote data from ' + url + ': ' + err.message;
+            console.log(message);
+            alert(message);
+        });
+    });
+}
+```
 
 ### NativeScript Angular
 In angular, you have to register the element in your app component like so:
 
-```
+```ts
 // app.component.ts
 import {registerElement} from "nativescript-angular/element-registry";
 registerElement("FilterableListpicker", () => require("nativescript-filterable-listpicker").FilterableListpicker);
@@ -58,7 +108,7 @@ registerElement("FilterableListpicker", () => require("nativescript-filterable-l
 
 Then use it in your templates like...
 
-```
+```xml
 <GridLayout>
     <Image src="res://nicebackgroundimage.jpg"></Image>
     <StackLayout>
@@ -70,7 +120,7 @@ Then use it in your templates like...
 ```
 
 Then in your code...
-```
+```ts
 @ViewChild('myfilter') myfilter: ElementRef;
 
 cancelFilterableList() {
@@ -90,7 +140,7 @@ Note: When calling show, as of 2.1.0 you can pass in a viewContainer that the pl
 use the list picker in modals now! For example, you could pass in a Page element, or a GridLayout that contains the FilterableListpicker element like this:
 
 in android:
-```
+```ts
 @ViewChild('myContainer') myContainer: ElementRef;
 
 public function showPicker() {
@@ -111,7 +161,7 @@ if in your object are:
 | description | OPTIONAL: This will display under the title smaller and in gray. |
 
 Here's some example code:
-```
+```ts
 public listitems = [
     {
         "image": "https://lh3.googleusercontent.com/gN6iBKP1b2GTXZZoCxhyXiYIAh8QJ_8xzlhEK6csyDadA4GdkEdIEy9Bc8s5jozt1g=w300",
@@ -158,6 +208,7 @@ The UI element accepts the following parameters:
 | canceled |  | This is just a function to call if the user cancels, probably rarely neccessary. |
 | showCancel |  | Show cancel button or not. |
 | enableSearch |  | Allow searching by showing the TextField at the top. |
+| autocomplete(fn: Function) |  | Allow binding listener `textChangeEvent` to Textfield and use the plugin as `autocomplete` eg.: Google Place API. |
 
 ## CSS Styling
 

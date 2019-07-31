@@ -1,13 +1,15 @@
 {
     "name": "nativescript-filterable-listpicker",
-    "version": "2.2.4",
+    "version": "2.2.5",
     "description": "A modal list picker with filtering capabilities.",
     "main": "filterable-listpicker",
     "typings": "index.d.ts",
     "nativescript": {
-        "platforms": {
-            "android": "3.0.0",
-            "ios": "3.0.0"
+        "tns-android": {
+            "version": "5.3.1"
+        },
+        "tns-ios": {
+            "version": "5.3.1"
         },
         "plugin": {
             "nan": "true",
@@ -49,6 +51,11 @@
             "name": "Nathanael Walker",
             "email": "walkerrunpdx@gmail.com",
             "url": "https://github.com/NathanWalker"
+        },
+        {
+            "name": "BADER ALDIN Kefah",
+            "email": "kefah.bader@gmail.com",
+            "url": "https://github.com/kefahB"
         }
     ],
     "repository": {
