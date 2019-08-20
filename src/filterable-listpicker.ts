@@ -89,10 +89,8 @@ function doImgCaching(element: any): Promise<any> {
                     cachedImageSource = fromNativeSource(image);
                     resolve(cachedImageSource);
                 }
-                reject("error when caching --")
             },
             error: (err) => {
-                console.log("error when caching !!!");
                 reject(err);
             }
         });
@@ -122,10 +120,8 @@ export const sourceProperty = new Property<
         
         if(typeof element === "object")
             unfilteredSource.push(new SourcesDataItem(element.title, element.image, element.description));
-        else {
-            console.log(element)
+        else
             unfilteredSource.push(new SourcesDataItem(element, null, null));
-        }
       });
     }
   }

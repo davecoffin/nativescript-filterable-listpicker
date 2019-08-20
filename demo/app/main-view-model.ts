@@ -61,7 +61,7 @@ export class HelloWorldModel extends Observable {
         for(let i = 0; i < 300; i++) {
             this.objArray.push({
                 title: "Title " + i,
-                image: "https://picsum.photos/1000/1200",
+                image: "https://picsum.photos/id/" + i +"/2024/2024",
                 description: "descriptions " + i
             })
         }
