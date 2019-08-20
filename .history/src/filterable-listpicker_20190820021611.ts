@@ -17,7 +17,7 @@ import { fromFile, fromNativeSource } from "tns-core-modules/image-source/image-
 let builder = require("tns-core-modules/ui/builder");
 const cache = new Cache();
 cache.enableDownload();
-//cache.placeholder = fromFile("./assets/download.png");
+cache.placeholder = fromFile("./assets/download.png");
 cache.maxRequests = 5;
 
 let unfilteredSource: Array<any> = [];

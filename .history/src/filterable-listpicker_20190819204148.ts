@@ -11,14 +11,8 @@ import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 import { isIOS } from "tns-core-modules/platform";
 import * as enums from "tns-core-modules/ui/enums";
-import { Cache } from "tns-core-modules/ui/image-cache";
-import { fromFile, fromNativeSource } from "tns-core-modules/image-source/image-source";
 
 let builder = require("tns-core-modules/ui/builder");
-const cache = new Cache();
-cache.enableDownload();
-//cache.placeholder = fromFile("./assets/download.png");
-cache.maxRequests = 5;
 
 let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
@@ -66,39 +60,6 @@ export const hintTextProperty = new Property<FilterableListpicker, string>({
   name: "hintText",
   defaultValue: "Enter text to filter..."
 });
-
-function doImgCaching(element: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-        let cachedImageSource;
-        const path = element.image;
-        const img = cache.get(path);
-        if (img) {
-            // Image already cached...
-            //console.log("image is already cached : " + element.image)
-            cachedImageSource = fromNativeSource(img);
-            resolve(cachedImageSource);
-        }
-
-        // If not present -- request its download + put it in the cache.
-        //console.log("download and cache the new image : " + element.image)
-        cache.push({
-            key: path,
-            url: path,
-            completed: (image, key) => {
-                if (path === key) {
-                    cachedImageSource = fromNativeSource(image);
-                    resolve(cachedImageSource);
-                }
-                reject("error when caching --")
-            },
-            error: (err) => {
-                console.log("error when caching !!!");
-                reject(err);
-            }
-        });
-    });
-  }
-
 export const sourceProperty = new Property<
   FilterableListpicker,
   ObservableArray<any>
@@ -110,22 +71,8 @@ export const sourceProperty = new Property<
     if (!filtering) {
       while (unfilteredSource.length) unfilteredSource.pop();
       newValue.forEach(element => {
-        // use caching if the image is an URL (not from res://)
-        let rgx = new RegExp("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
-        if(element.image && rgx.test(element.image)) {
-            doImgCaching(element).then(res => {
-                element.image = res;
-            }).catch(err => {
-                console.log("Error caching " + err);
-            });
-        }
-        
-        if(typeof element === "object")
-            unfilteredSource.push(new SourcesDataItem(element.title, element.image, element.description));
-        else {
-            console.log(element)
-            unfilteredSource.push(new SourcesDataItem(element, null, null));
-        }
+          console.log("image is : " + element.image)
+        unfilteredSource.push(element);
       });
     }
   }
@@ -150,7 +97,7 @@ export class FilterableListpicker extends GridLayout {
                       <ListView.itemTemplate>
                           <StackLayout class="flp-row">
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
-                                  <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
+                                  <Image src="{{image ? image : 'https://davecoffin.com/images/expert_badge.png'}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="flp-description"></Label>
@@ -295,7 +242,6 @@ export class FilterableListpicker extends GridLayout {
     this.visibility = enums.Visibility.visible;
     this._container.visibility = "visible";
 
-    this.source = unfilteredSource.filter(i => true);
     if (isIOS && this.blur && this.blur != "none") {
       let iosView: UIView = this._container.ios;
       let effectView = UIVisualEffectView.alloc().init();
@@ -366,7 +312,13 @@ export class FilterableListpicker extends GridLayout {
   private _searchFilterFn(data: any) {
     filtering = true;
     this.source = unfilteredSource.filter(item => {
-        return item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+      if (item.title) {
+        return (
+          item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+        );
+      } else {
+        return item.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
+      }
     });
     filtering = false;
   }
@@ -383,22 +335,3 @@ hideFilterProperty.register(FilterableListpicker);
 blurProperty.register(FilterableListpicker);
 hintTextProperty.register(FilterableListpicker);
 sourceProperty.register(FilterableListpicker);
-
-export interface SourcesInterface {
-    title: string;
-    image?: any;
-    description?: string;
-}
-
-export class SourcesDataItem implements SourcesInterface {
-    title: string;
-    image?: any;
-    description?: string;
-
-    constructor(title: string, image?: any, description?: string)
-    {
-        this.title = title;
-        this.image = image;
-        this.description = description;
-    }
-}
