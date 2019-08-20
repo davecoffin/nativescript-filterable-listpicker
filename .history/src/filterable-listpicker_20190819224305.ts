@@ -16,11 +16,10 @@ import { fromFile, fromNativeSource } from "tns-core-modules/image-source/image-
 
 let builder = require("tns-core-modules/ui/builder");
 const cache = new Cache();
-cache.enableDownload();
-//cache.placeholder = fromFile("./assets/download.png");
+cache.placeholder = fromFile("./assets/download.png");
 cache.maxRequests = 5;
 
-let unfilteredSource: Array<any> = [];
+let unfilteredSource: ObservableArray<SourcesDataItem> = new ObservableArray<SourcesDataItem>();
 let filtering: boolean = false;
 export const listWidthProperty = new Property<FilterableListpicker, string>({
   name: "listWidth",
@@ -67,41 +66,37 @@ export const hintTextProperty = new Property<FilterableListpicker, string>({
   defaultValue: "Enter text to filter..."
 });
 
-function doImgCaching(element: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-        let cachedImageSource;
-        const path = element.image;
-        const img = cache.get(path);
-        if (img) {
-            // Image already cached...
-            //console.log("image is already cached : " + element.image)
-            cachedImageSource = fromNativeSource(img);
-            resolve(cachedImageSource);
-        }
-
+function doImgCaching(element: any): any {
+    cache.enableDownload();
+    let cachedImageSource;
+    const path = element.image;
+    const img = cache.get(path);
+    if (img) {
+        // Image already cached...
+        console.log("image is already cached : " + element.image)
+        //cachedImageSource = fromNativeSource(img);
+        //element.image = cachedImageSource;
+        return img;
+    } else {
         // If not present -- request its download + put it in the cache.
-        //console.log("download and cache the new image : " + element.image)
+        console.log("download and cache the new image : " + element.image)
         cache.push({
             key: path,
             url: path,
             completed: (image, key) => {
                 if (path === key) {
-                    cachedImageSource = fromNativeSource(image);
-                    resolve(cachedImageSource);
+                    //cachedImageSource = fromNativeSource(image);
+                    //element.image = cachedImageSource;
+                    return image;
                 }
-                reject("error when caching --")
-            },
-            error: (err) => {
-                console.log("error when caching !!!");
-                reject(err);
             }
         });
-    });
+    }
   }
 
 export const sourceProperty = new Property<
   FilterableListpicker,
-  ObservableArray<any>
+  ObservableArray<SourcesDataItem>
 >({
   name: "source",
   defaultValue: undefined,
@@ -110,22 +105,12 @@ export const sourceProperty = new Property<
     if (!filtering) {
       while (unfilteredSource.length) unfilteredSource.pop();
       newValue.forEach(element => {
-        // use caching if the image is an URL (not from res://)
+        // use caching if the image is an URL
         let rgx = new RegExp("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
         if(element.image && rgx.test(element.image)) {
-            doImgCaching(element).then(res => {
-                element.image = res;
-            }).catch(err => {
-                console.log("Error caching " + err);
-            });
+            //element.image = doImgCaching(element);
         }
-        
-        if(typeof element === "object")
-            unfilteredSource.push(new SourcesDataItem(element.title, element.image, element.description));
-        else {
-            console.log(element)
-            unfilteredSource.push(new SourcesDataItem(element, null, null));
-        }
+        unfilteredSource.push(new SourcesDataItem(element.title, element.image, element.description));
       });
     }
   }
@@ -150,7 +135,7 @@ export class FilterableListpicker extends GridLayout {
                       <ListView.itemTemplate>
                           <StackLayout class="flp-row">
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
-                                  <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
+                                  <Image src="{{image ? image : 'https://davecoffin.com/images/expert_badge.png'}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="flp-description"></Label>
@@ -295,7 +280,6 @@ export class FilterableListpicker extends GridLayout {
     this.visibility = enums.Visibility.visible;
     this._container.visibility = "visible";
 
-    this.source = unfilteredSource.filter(i => true);
     if (isIOS && this.blur && this.blur != "none") {
       let iosView: UIView = this._container.ios;
       let effectView = UIVisualEffectView.alloc().init();
@@ -365,9 +349,16 @@ export class FilterableListpicker extends GridLayout {
 
   private _searchFilterFn(data: any) {
     filtering = true;
-    this.source = unfilteredSource.filter(item => {
-        return item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+    let i = 0;
+    const src: ObservableArray<SourcesDataItem>= new ObservableArray<SourcesDataItem>();
+    unfilteredSource.forEach((item, index) => {
+        console.log(item)
+      if (item.title) {
+        if(item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1)
+            src.push(new SourcesDataItem(item.title, item.image, item.description))
+      }
     });
+    this.source = src;
     filtering = false;
   }
 }

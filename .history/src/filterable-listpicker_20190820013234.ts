@@ -17,7 +17,7 @@ import { fromFile, fromNativeSource } from "tns-core-modules/image-source/image-
 let builder = require("tns-core-modules/ui/builder");
 const cache = new Cache();
 cache.enableDownload();
-//cache.placeholder = fromFile("./assets/download.png");
+cache.placeholder = fromFile("./assets/download.png");
 cache.maxRequests = 5;
 
 let unfilteredSource: Array<any> = [];
@@ -74,22 +74,24 @@ function doImgCaching(element: any): Promise<any> {
         const img = cache.get(path);
         if (img) {
             // Image already cached...
-            //console.log("image is already cached : " + element.image)
+            console.log("image is already cached : " + element.image)
             cachedImageSource = fromNativeSource(img);
+            //element.image = cachedImageSource;
             resolve(cachedImageSource);
         }
 
         // If not present -- request its download + put it in the cache.
-        //console.log("download and cache the new image : " + element.image)
+        console.log("download and cache the new image : " + element.image)
         cache.push({
             key: path,
             url: path,
             completed: (image, key) => {
                 if (path === key) {
                     cachedImageSource = fromNativeSource(image);
+                    //element.image = cachedImageSource;
                     resolve(cachedImageSource);
                 }
-                reject("error when caching --")
+                reject("error when caching ______ )))")
             },
             error: (err) => {
                 console.log("error when caching !!!");
@@ -110,11 +112,11 @@ export const sourceProperty = new Property<
     if (!filtering) {
       while (unfilteredSource.length) unfilteredSource.pop();
       newValue.forEach(element => {
-        // use caching if the image is an URL (not from res://)
+        // use caching if the image is an URL
         let rgx = new RegExp("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
         if(element.image && rgx.test(element.image)) {
             doImgCaching(element).then(res => {
-                element.image = res;
+                console.log(res)
             }).catch(err => {
                 console.log("Error caching " + err);
             });

@@ -17,7 +17,7 @@ import { fromFile, fromNativeSource } from "tns-core-modules/image-source/image-
 let builder = require("tns-core-modules/ui/builder");
 const cache = new Cache();
 cache.enableDownload();
-//cache.placeholder = fromFile("./assets/download.png");
+cache.placeholder = fromFile("./assets/download.png");
 cache.maxRequests = 5;
 
 let unfilteredSource: Array<any> = [];
@@ -74,28 +74,25 @@ function doImgCaching(element: any): Promise<any> {
         const img = cache.get(path);
         if (img) {
             // Image already cached...
-            //console.log("image is already cached : " + element.image)
-            cachedImageSource = fromNativeSource(img);
-            resolve(cachedImageSource);
-        }
-
-        // If not present -- request its download + put it in the cache.
-        //console.log("download and cache the new image : " + element.image)
-        cache.push({
-            key: path,
-            url: path,
-            completed: (image, key) => {
-                if (path === key) {
-                    cachedImageSource = fromNativeSource(image);
-                    resolve(cachedImageSource);
+            console.log("image is already cached : " + element.image)
+            //cachedImageSource = fromNativeSource(img);
+            //element.image = cachedImageSource;
+            resolve(img);
+        } else {
+            // If not present -- request its download + put it in the cache.
+            console.log("download and cache the new image : " + element.image)
+            cache.push({
+                key: path,
+                url: path,
+                completed: (image, key) => {
+                    if (path === key) {
+                        //cachedImageSource = fromNativeSource(image);
+                        //element.image = cachedImageSource;
+                        resolve(image);
+                    }
                 }
-                reject("error when caching --")
-            },
-            error: (err) => {
-                console.log("error when caching !!!");
-                reject(err);
-            }
-        });
+            });
+        }
     });
   }
 
@@ -110,22 +107,17 @@ export const sourceProperty = new Property<
     if (!filtering) {
       while (unfilteredSource.length) unfilteredSource.pop();
       newValue.forEach(element => {
-        // use caching if the image is an URL (not from res://)
+        // use caching if the image is an URL
         let rgx = new RegExp("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
         if(element.image && rgx.test(element.image)) {
-            doImgCaching(element).then(res => {
-                element.image = res;
+            /*doImgCaching(element).then(res => {
+                console.log(res)
             }).catch(err => {
                 console.log("Error caching " + err);
-            });
+            });*/
         }
-        
-        if(typeof element === "object")
-            unfilteredSource.push(new SourcesDataItem(element.title, element.image, element.description));
-        else {
-            console.log(element)
-            unfilteredSource.push(new SourcesDataItem(element, null, null));
-        }
+        console.log(element)
+        unfilteredSource.push(element);
       });
     }
   }
@@ -150,7 +142,7 @@ export class FilterableListpicker extends GridLayout {
                       <ListView.itemTemplate>
                           <StackLayout class="flp-row">
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
-                                  <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
+                                  <Image src="~/assets/download.png" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="flp-description"></Label>
@@ -295,7 +287,6 @@ export class FilterableListpicker extends GridLayout {
     this.visibility = enums.Visibility.visible;
     this._container.visibility = "visible";
 
-    this.source = unfilteredSource.filter(i => true);
     if (isIOS && this.blur && this.blur != "none") {
       let iosView: UIView = this._container.ios;
       let effectView = UIVisualEffectView.alloc().init();
@@ -366,7 +357,13 @@ export class FilterableListpicker extends GridLayout {
   private _searchFilterFn(data: any) {
     filtering = true;
     this.source = unfilteredSource.filter(item => {
-        return item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+      if (item.title) {
+        return (
+          item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+        );
+      } else {
+        return item.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
+      }
     });
     filtering = false;
   }
@@ -390,7 +387,7 @@ export interface SourcesInterface {
     description?: string;
 }
 
-export class SourcesDataItem implements SourcesInterface {
+export class SourcesDataItems implements SourcesInterface {
     title: string;
     image?: any;
     description?: string;
