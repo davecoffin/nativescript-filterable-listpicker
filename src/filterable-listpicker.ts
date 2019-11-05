@@ -136,7 +136,7 @@ export class FilterableListpicker extends GridLayout {
   onLoaded() {
     super.onLoaded();
     //let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
-    let innerComponent = builder.parse(`
+    let innerComponent = builder.Builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
               <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
               <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container" loaded="{{loadedInnerContainer}}">
