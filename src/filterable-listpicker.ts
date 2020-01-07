@@ -11,14 +11,8 @@ import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 import { isIOS } from "tns-core-modules/platform";
 import * as enums from "tns-core-modules/ui/enums";
-import { Cache } from "tns-core-modules/ui/image-cache";
-import { fromFile, fromNativeSource } from "tns-core-modules/image-source/image-source";
 
 let builder = require("tns-core-modules/ui/builder");
-const cache = new Cache();
-cache.enableDownload();
-//cache.placeholder = fromFile("./assets/download.png");
-cache.maxRequests = 5;
 
 let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
@@ -66,37 +60,6 @@ export const hintTextProperty = new Property<FilterableListpicker, string>({
   name: "hintText",
   defaultValue: "Enter text to filter..."
 });
-
-function doImgCaching(element: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-        let cachedImageSource;
-        const path = element.image;
-        const img = cache.get(path);
-        if (img) {
-            // Image already cached...
-            //console.log("image is already cached : " + element.image)
-            cachedImageSource = fromNativeSource(img);
-            resolve(cachedImageSource);
-        }
-
-        // If not present -- request its download + put it in the cache.
-        //console.log("download and cache the new image : " + element.image)
-        cache.push({
-            key: path,
-            url: path,
-            completed: (image, key) => {
-                if (path === key) {
-                    cachedImageSource = fromNativeSource(image);
-                    resolve(cachedImageSource);
-                }
-            },
-            error: (err) => {
-                reject(err);
-            }
-        });
-    });
-  }
-
 export const sourceProperty = new Property<
   FilterableListpicker,
   ObservableArray<any>
@@ -108,20 +71,7 @@ export const sourceProperty = new Property<
     if (!filtering) {
       while (unfilteredSource.length) unfilteredSource.pop();
       newValue.forEach(element => {
-        // use caching if the image is an URL (not from res://)
-        let rgx = new RegExp("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$");
-        if(element.image && rgx.test(element.image)) {
-            doImgCaching(element).then(res => {
-                element.image = res;
-            }).catch(err => {
-                console.log("Error caching " + err);
-            });
-        }
-        
-        if(typeof element === "object")
-            unfilteredSource.push(new SourcesDataItem(element.title, element.image, element.description));
-        else
-            unfilteredSource.push(new SourcesDataItem(element, null, null));
+        unfilteredSource.push(element);
       });
     }
   }
@@ -136,7 +86,7 @@ export class FilterableListpicker extends GridLayout {
   onLoaded() {
     super.onLoaded();
     //let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
-    let innerComponent = builder.parse(`
+    let innerComponent = builder.Builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
               <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
               <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container" loaded="{{loadedInnerContainer}}">
@@ -362,7 +312,13 @@ export class FilterableListpicker extends GridLayout {
   private _searchFilterFn(data: any) {
     filtering = true;
     this.source = unfilteredSource.filter(item => {
-        return item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+      if (item.title) {
+        return (
+          item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1
+        );
+      } else {
+        return item.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
+      }
     });
     filtering = false;
   }
