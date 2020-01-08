@@ -157,7 +157,7 @@ if in your object are:
 | Property | Description|
 | --- | --- |
 | title | The title, this is what your list will be filtered on, and it will display in bold. |
-| image | OPTIONAL: This will display to the left of the title. If the image is a `url`, this module will cache it for instant loading ;-) |
+| image | OPTIONAL: This will display to the left of the title. |
 | description | OPTIONAL: This will display under the title smaller and in gray. |
 
 Here's some example code:
@@ -186,10 +186,9 @@ Here's how it will look in the picker:
 
 <img src="https://cl.ly/phhb/Screen%20Shot%202018-02-22%20at%209.46.13%20AM.png" width="400">
 
-
 ### Webpack
-Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts. See more <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
 
+Thanks to <a href="https://github.com/mjrichards91">Mike Richards</a>, this plugin is now compatible with webpack. Just follow the webpack instructions carefully, in particular the `bundle-config.js` and `require("bundle-entry-points");` parts. See more <a href="https://github.com/davecoffin/nativescript-filterable-listpicker/issues/13">here</a>.
 
 ## API
 

@@ -8,7 +8,7 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "org.nativescript.demo"  
+    applicationId = "org.nativescript.filterablelistpicker"  
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
