@@ -1,6 +1,6 @@
 {
     "name": "nativescript-filterable-listpicker",
-    "version": "2.2.6",
+    "version": "2.2.7",
     "description": "A modal list picker with filtering capabilities.",
     "main": "filterable-listpicker",
     "typings": "index.d.ts",

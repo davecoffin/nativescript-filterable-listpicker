@@ -1,4 +1,4 @@
-[![Twitter URL](https://img.shields.io/badge/twitter-davecoffin-blue.svg)](https://twitter.com/davecoffin)
+![Built With Stencil](https://img.shields.io/badge/Who%20to%20harass-Matt-brightgreen)
 
 # nativescript-filterable-listpicker
 
