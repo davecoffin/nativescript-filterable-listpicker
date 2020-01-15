@@ -2,10 +2,7 @@
 
 # nativescript-filterable-listpicker
 
-The native listpickers on iOS and Android are not great for huge lists that users may want to filter. This plugin is a modal that offers filtering capabilities.
-
-<img src="https://github.com/kefahB/nativescript-filterable-listpicker/blob/master/assets/filterablelist.gif" height="600" > 
-
+The native listpickers on iOS and Android are not great for huge lists that users may want to filter. This plugin is a modal that offers filtering capabilities. 
 
 ## Installation
 
@@ -270,7 +267,10 @@ The UI element accepts the following parameters:
   font-size: 12;
 }
 ```
-
+# To publish updates for LMI fork of this module:
+1. Commit your changes and push to the repository.
+2. `cd src`
+3. `npm run publish`
     
 ## License
 
