@@ -1,16 +1,14 @@
 import { ObservableArray } from "tns-core-modules/data/observable-array";
-
+import { isIOS } from "tns-core-modules/platform";
 import {
-  View,
-  Property,
   booleanConverter,
+  Property,
   PropertyChangeData
 } from "tns-core-modules/ui/core/view";
+import * as enums from "tns-core-modules/ui/enums";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
-import { isIOS } from "tns-core-modules/platform";
-import * as enums from "tns-core-modules/ui/enums";
 
 let builder = require("tns-core-modules/ui/builder");
 
@@ -85,7 +83,7 @@ export class FilterableListpicker extends GridLayout {
 
   onLoaded() {
     super.onLoaded();
-    //let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
+    // let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
     let innerComponent = builder.Builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
               <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
@@ -143,31 +141,30 @@ export class FilterableListpicker extends GridLayout {
   }
 
   autocomplete(fn: Function) {
-    if(!this.isAutocomplete)
-        return;
-    if(typeof fn !== "function") 
-        throw("[FilterableListPicker]: autotcomplete params must be a Function type !");
+    if (!this.isAutocomplete) return;
+    if (typeof fn !== "function")
+      throw "[FilterableListPicker]: autotcomplete params must be a Function type !";
 
     /**
      * Populate sources with suggestions if is defined is usefull if we have a most use list
      * for the moment user can't search into suggestion .. writing into Textfield will active autocomplete
-     * */ 
-    if(!this.source)
-        this.source = [];
-    
+     * */
+
+    if (!this.source) this.source = [];
+
     // Copy suggestion list to bind it when Textfield is empty
-    this._suggestions =  this.source;
-  
+    this._suggestions = this.source;
+
     // bind custome autocomplete function
     this._textField.on("textChange", (data: PropertyChangeData) => {
-        if(!data.value && this._suggestions.length > 0) {
-            this.set("source", this._suggestions)
-            this.notifyPropertyChange("source", this._suggestions);
-            console.log(this._suggestions);
-            return;
-        }
-        fn(data);
-    })
+      if (!data.value && this._suggestions.length > 0) {
+        this.set("source", this._suggestions);
+        this.notifyPropertyChange("source", this._suggestions);
+        console.log(this._suggestions);
+        return;
+      }
+      fn(data);
+    });
   }
 
   loadedTextField(args) {
@@ -175,12 +172,14 @@ export class FilterableListpicker extends GridLayout {
   }
 
   public choose(args) {
-    let item = this.source[args.index];
+    const selectedItem = this.source[args.index];
+    const item = args.view;
     this.hide();
     this.notify({
       eventName: "itemTapped",
       object: this,
-      selectedItem: item
+      item,
+      selectedItem
     });
   }
 
@@ -213,7 +212,10 @@ export class FilterableListpicker extends GridLayout {
           opacity: 0,
           duration: 200
         })
-        .then(_ => {}, err => {});
+        .then(
+          _ => {},
+          err => {}
+        );
     }
 
     if (this.enableSearch) {
@@ -242,7 +244,7 @@ export class FilterableListpicker extends GridLayout {
     this._container.visibility = "visible";
 
     this.source = unfilteredSource.filter(i => true);
-    if (isIOS && this.blur && this.blur != "none") {
+    if (isIOS && this.blur && this.blur !== "none") {
       let iosView: UIView = this._container.ios;
       let effectView = UIVisualEffectView.alloc().init();
       effectView.frame = CGRectMake(
@@ -260,7 +262,7 @@ export class FilterableListpicker extends GridLayout {
         0.3,
         () => {
           let theme = UIBlurEffectStyle.Dark;
-          if (this.blur == "light") theme = UIBlurEffectStyle.Light;
+          if (this.blur === "light") theme = UIBlurEffectStyle.Light;
           effectView.effect = UIBlurEffect.effectWithStyle(theme);
         },
         () => {
@@ -275,7 +277,10 @@ export class FilterableListpicker extends GridLayout {
           opacity: 1,
           duration: 200
         })
-        .then(_ => {}, err => {});
+        .then(
+          _ => {},
+          err => {}
+        );
     }
 
     this._picker.scaleX = 0.7;
@@ -288,7 +293,10 @@ export class FilterableListpicker extends GridLayout {
         duration: 400,
         curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
       })
-      .then(_ => {}, err => {});
+      .then(
+        _ => {},
+        err => {}
+      );
 
     if (this.enableSearch) {
       if (JSON.parse(this.focusOnShow)) this._textField.focus();
@@ -297,16 +305,16 @@ export class FilterableListpicker extends GridLayout {
   }
 
   get isAutocomplete(): boolean {
-      return this._isAutocomplete;
+    return this._isAutocomplete;
   }
 
   set isAutocomplete(val: boolean) {
-      if(val === false) {
-        // remve listener for TextField
-        console.log(val)
-        this._textField.off("textChange");
-      }
-      this._isAutocomplete = val;
+    if (val === false) {
+      // remve listener for TextField
+      console.log(val);
+      this._textField.off("textChange");
+    }
+    this._isAutocomplete = val;
   }
 
   private _searchFilterFn(data: any) {
@@ -337,20 +345,19 @@ hintTextProperty.register(FilterableListpicker);
 sourceProperty.register(FilterableListpicker);
 
 export interface SourcesInterface {
-    title: string;
-    image?: any;
-    description?: string;
+  title: string;
+  image?: any;
+  description?: string;
 }
 
 export class SourcesDataItem implements SourcesInterface {
-    title: string;
-    image?: any;
-    description?: string;
+  title: string;
+  image?: any;
+  description?: string;
 
-    constructor(title: string, image?: any, description?: string)
-    {
-        this.title = title;
-        this.image = image;
-        this.description = description;
-    }
+  constructor(title: string, image?: any, description?: string) {
+    this.title = title;
+    this.image = image;
+    this.description = description;
+  }
 }
