@@ -10,7 +10,7 @@ import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 
-let builder = require("tns-core-modules/ui/builder");
+const builder = require("tns-core-modules/ui/builder");
 
 let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
@@ -83,6 +83,7 @@ export class FilterableListpicker extends GridLayout {
 
   onLoaded() {
     super.onLoaded();
+    console.log("Builder ", builder);
     // let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
     let innerComponent = builder.Builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
