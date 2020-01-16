@@ -1,5 +1,6 @@
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { isIOS } from "tns-core-modules/platform";
+import { Builder } from "tns-core-modules/ui";
 import {
   booleanConverter,
   Property,
@@ -10,10 +11,9 @@ import { AnimationCurve } from "tns-core-modules/ui/enums";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 
-const builder = require("tns-core-modules/ui/builder");
-
 let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
+let builder: Builder;
 export const listWidthProperty = new Property<FilterableListpicker, string>({
   name: "listWidth",
   defaultValue: "300"
@@ -78,14 +78,14 @@ export const sourceProperty = new Property<
 export class FilterableListpicker extends GridLayout {
   constructor() {
     super();
+    console.log("Builder ", Builder);
     this._searchFilter = this._searchFilterFn.bind(this);
   }
 
   onLoaded() {
     super.onLoaded();
-    console.log("Builder ", builder);
     // let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
-    let innerComponent = builder.Builder.parse(`
+    let innerComponent = Builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
               <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
               <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container" loaded="{{loadedInnerContainer}}">
@@ -113,6 +113,8 @@ export class FilterableListpicker extends GridLayout {
           </GridLayout>`);
     innerComponent.bindingContext = this;
     this.addChild(innerComponent);
+
+    console.log("Inner Comp ", innerComponent);
   }
   public static canceledEvent = "canceled";
   public static itemTappedEvent = "itemTapped";
