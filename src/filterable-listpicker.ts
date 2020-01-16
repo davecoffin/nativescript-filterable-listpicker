@@ -176,15 +176,17 @@ export class FilterableListpicker extends GridLayout {
   public choose(args) {
     const selectedItem = this.source[args.index];
     const item = args.view;
-    if (item.isEnabled) {
-      this.hide();
-    }
+
     this.notify({
       eventName: "itemTapped",
       object: this,
       item,
       selectedItem
     });
+    console.log("Enabled ", item.isEnabled);
+    if (item.isEnabled) {
+      this.hide();
+    }
   }
 
   public cancel() {
