@@ -267,7 +267,7 @@ The UI element accepts the following parameters:
   font-size: 12;
 }
 ```
-# To publish updates for LMI fork of this module:
+# To publish updates:
 1. Commit your changes and push to the repository.
 2. `cd src`
 3. `npm run publish`
