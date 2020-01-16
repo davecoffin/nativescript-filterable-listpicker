@@ -8,7 +8,7 @@ import {
 } from "tns-core-modules/ui/core/view";
 import * as enums from "tns-core-modules/ui/enums";
 import { AnimationCurve } from "tns-core-modules/ui/enums";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { TextField } from "tns-core-modules/ui/text-field";
 
 let unfilteredSource: Array<any> = [];
