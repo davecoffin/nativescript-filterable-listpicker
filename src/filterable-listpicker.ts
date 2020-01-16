@@ -184,9 +184,9 @@ export class FilterableListpicker extends GridLayout {
       selectedItem
     });
     console.log("Enabled ", item.isEnabled);
-    if (item.isEnabled) {
-      this.hide();
-    }
+    // if (item.isEnabled) {
+    //   this.hide();
+    // }
   }
 
   public cancel() {
