@@ -77,7 +77,7 @@ export const sourceProperty = new Property<
 export class FilterableListpicker extends GridLayout {
   constructor() {
     super();
-    console.log("Builder ", builder);
+    console.log(" ------- Builder ", builder);
     this._searchFilter = this._searchFilterFn.bind(this);
   }
 
@@ -99,7 +99,7 @@ export class FilterableListpicker extends GridLayout {
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="flp-description"></Label>
                                   </StackLayout>
-                                  <Label col="2" text="{{selected ? selected : ''}}" class="flp-item-selected" visibility="{{selected ? 'visible' : 'collapsed'}}"></Label>
+                                  <Label col="2" text="{{selected && selected.length ? selected : ''}}" class="flp-item-selected" visibility="{{selected ? 'visible' : 'collapsed'}}"></Label>
                               </GridLayout>
                               <Label text="{{$value}}" textWrap="true" class="flp-no-title" visibility="{{title ? 'collapsed' : 'visible'}}"></Label>
                           </StackLayout>
