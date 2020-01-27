@@ -1,6 +1,6 @@
 {
   "name": "nativescript-filterable-listpicker",
-  "version": "2.2.17",
+  "version": "2.2.25",
   "description": "A modal list picker with filtering capabilities.",
   "main": "filterable-listpicker",
   "typings": "index.d.ts",
@@ -35,6 +35,7 @@
     "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove @proplugins/nativescript-filterable-listpicker && tns plugin add ../src && npx rimraf -- package-lock.json",
     "clean": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json && cd ../src && npx rimraf -- node_modules",
     "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'",
+    "pack": "cd ../publish && ./pack.sh && cd ..",
     "publish": "npm version patch && cd ../publish && ./publish.sh && cd .."
   },
   "keywords": [

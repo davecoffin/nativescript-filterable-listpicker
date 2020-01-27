@@ -181,11 +181,18 @@ export class FilterableListpicker extends GridLayout {
       item,
       selectedItem
     });
-    lv.refresh();
-    console.log("Enabled ", item.isEnabled);
     // if (item.isEnabled) {
     //   this.hide();
     // }
+  }
+
+  public setSelected(indx) {
+    const selectedItem = this.source[indx];
+    this.notify({
+      eventName: "itemUpdated",
+      object: this,
+      selectedItem
+    });
   }
 
   public cancel() {
