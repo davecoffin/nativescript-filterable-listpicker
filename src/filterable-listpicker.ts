@@ -90,7 +90,7 @@ export class FilterableListpicker extends GridLayout {
               <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container" loaded="{{loadedInnerContainer}}">
                   <Label row="0" text="{{headingTitle ? headingTitle : ''}}" class="flp-heading-title" visibility="{{headingTitle ? 'visible' : 'collapsed'}}"></Label>
                   <TextField hint="{{hintText}}" row="1" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}" loaded="{{loadedTextField}}"></TextField>
-                  <ListView id="filterLV" items="{{ source }}" row="2" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview">
+                  <ListView id="filterLV" items="{{ source }}" row="2" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview" itemTemplateSelector="$index">
                       <ListView.itemTemplate>
                           <StackLayout id="{{'phase' + $index}}" class="flp-row">
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
