@@ -180,7 +180,7 @@ export class FilterableListpicker extends GridLayout {
       item,
       selectedItem
     });
-    this.hide();
+    // this.hide();
   }
 
   public setSelected(indx) {
