@@ -86,13 +86,13 @@ export class FilterableListpicker extends GridLayout {
     // let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
     let innerComponent = builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
-              <StackLayout tap="{{cancel}}" width="100%" height="100%"></StackLayout>
+              <StackLayout width="100%" height="100%"></StackLayout>
               <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container" loaded="{{loadedInnerContainer}}">
                   <Label row="0" text="{{headingTitle ? headingTitle : ''}}" class="flp-heading-title" visibility="{{headingTitle ? 'visible' : 'collapsed'}}"></Label>
                   <TextField hint="{{hintText}}" row="1" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}" loaded="{{loadedTextField}}"></TextField>
                   <ListView id="filterLV" items="{{ source }}" row="2" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview">
                       <ListView.itemTemplate>
-                          <StackLayout class="flp-row">
+                          <StackLayout id="{{'phase' + $index}}" class="flp-row">
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
                                   <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
