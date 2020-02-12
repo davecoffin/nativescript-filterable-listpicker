@@ -95,7 +95,7 @@ export class FilterableListpicker extends GridLayout {
                               <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="{{ !locked ? 'flp-row-container' : 'flp-row-container locked' }}">
                                   <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
-                                      <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
+                                      <Label text="{{title ? title : ''}}" textWrap="true" class="{{ !selected ? 'flp-title' : 'flp-title selected' }}"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="flp-description"></Label>
                                   </StackLayout>
                               </GridLayout>
@@ -357,6 +357,7 @@ export interface SourcesInterface {
   image?: any;
   description?: string;
   locked?: boolean;
+  selected?: boolean;
 }
 
 export class SourcesDataItem implements SourcesInterface {
@@ -364,16 +365,19 @@ export class SourcesDataItem implements SourcesInterface {
   image?: any;
   description?: string;
   locked?: boolean;
+  selected?: boolean;
 
   constructor(
     title: string,
     image?: any,
     description?: string,
-    locked?: boolean
+    locked?: boolean,
+    selected?: boolean
   ) {
     this.title = title;
     this.image = image;
     this.description = description;
     this.locked = locked;
+    this.selected = selected;
   }
 }
