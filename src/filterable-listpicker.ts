@@ -77,7 +77,6 @@ export const sourceProperty = new Property<
 export class FilterableListpicker extends GridLayout {
   constructor() {
     super();
-    console.log(" ------- Builder ", builder);
     this._searchFilter = this._searchFilterFn.bind(this);
   }
 
@@ -93,7 +92,7 @@ export class FilterableListpicker extends GridLayout {
                   <ListView id="filterLV" items="{{ source }}" row="2" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview" itemTemplateSelector="$index">
                       <ListView.itemTemplate>
                           <StackLayout id="{{id}}" class="flp-row">
-                              <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="flp-row-container">
+                              <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="{{ !locked ? 'flp-row-container' : 'flp-row-container locked' }}">
                                   <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="flp-title"></Label>
@@ -357,16 +356,24 @@ export interface SourcesInterface {
   title: string;
   image?: any;
   description?: string;
+  locked?: boolean;
 }
 
 export class SourcesDataItem implements SourcesInterface {
   title: string;
   image?: any;
   description?: string;
+  locked?: boolean;
 
-  constructor(title: string, image?: any, description?: string) {
+  constructor(
+    title: string,
+    image?: any,
+    description?: string,
+    locked?: boolean
+  ) {
     this.title = title;
     this.image = image;
     this.description = description;
+    this.locked = locked;
   }
 }
