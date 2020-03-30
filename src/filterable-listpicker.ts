@@ -31,6 +31,11 @@ export const showCancelProperty = new Property<FilterableListpicker, boolean>({
 	defaultValue: true,
 	valueConverter: booleanConverter
 });
+export const showSaveProperty = new Property<FilterableListpicker, boolean>({
+	name: "showSave",
+	defaultValue: true,
+	valueConverter: booleanConverter
+});
 export const dimmerColorProperty = new Property<FilterableListpicker, string>({
 	name: "dimmerColor",
 	defaultValue: "rgba(0,0,0,0.8)"
@@ -96,7 +101,7 @@ export class FilterableListpicker extends GridLayout {
                       </ListView.itemTemplate>
                   </ListView>
                   <StackLayout row="3" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapse'}}">
-                      <Button text="Done" tap="{{saveChange}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
+                      <Button text="Save" tap="{{ saveChange }}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
                   </StackLayout>
               </GridLayout>
           </GridLayout>`);
@@ -337,6 +342,7 @@ listHeightProperty.register(FilterableListpicker);
 headingTitleProperty.register(FilterableListpicker);
 enableSearchProperty.register(FilterableListpicker);
 showCancelProperty.register(FilterableListpicker);
+showSaveProperty.register(FilterableListpicker);
 dimmerColorProperty.register(FilterableListpicker);
 focusOnShowProperty.register(FilterableListpicker);
 hideFilterProperty.register(FilterableListpicker);
