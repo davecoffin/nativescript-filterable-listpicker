@@ -31,11 +31,6 @@ export const showCancelProperty = new Property<FilterableListpicker, boolean>({
 	defaultValue: true,
 	valueConverter: booleanConverter
 });
-export const showSaveProperty = new Property<FilterableListpicker, boolean>({
-	name: "showSave",
-	defaultValue: true,
-	valueConverter: booleanConverter
-});
 export const dimmerColorProperty = new Property<FilterableListpicker, string>({
 	name: "dimmerColor",
 	defaultValue: "rgba(0,0,0,0.8)"
@@ -101,7 +96,7 @@ export class FilterableListpicker extends GridLayout {
                       </ListView.itemTemplate>
                   </ListView>
                   <StackLayout row="3" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapse'}}">
-                      <Button text="Save" tap="{{ saveChange }}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
+                      <Button text="Done" tap="{{cancel}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
                   </StackLayout>
               </GridLayout>
           </GridLayout>`);
@@ -110,7 +105,6 @@ export class FilterableListpicker extends GridLayout {
 	}
 	public static canceledEvent = "canceled";
 	public static itemTappedEvent = "itemTapped";
-	public static saveChangeEvent = "saveChange";
 	public source: any;
 	public headingTitle: string;
 	public dimmerColor: any;
@@ -177,7 +171,7 @@ export class FilterableListpicker extends GridLayout {
 			item,
 			selectedItem
 		});
-		// this.hide();
+		this.hide();
 	}
 
 	public setSelected(indx) {
@@ -189,18 +183,12 @@ export class FilterableListpicker extends GridLayout {
 		});
 	}
 
-	public cancel() {
+	public cancel(args) {
+		const selectedItem = this.source[args.index];
 		this.notify({
 			eventName: "canceled",
-			object: this
-		});
-		this.hide();
-	}
-
-	public saveChange() {
-		this.notify({
-			eventName: "SaveChange",
-			object: this
+			object: this,
+			selectedItem
 		});
 		this.hide();
 	}
@@ -343,7 +331,6 @@ listHeightProperty.register(FilterableListpicker);
 headingTitleProperty.register(FilterableListpicker);
 enableSearchProperty.register(FilterableListpicker);
 showCancelProperty.register(FilterableListpicker);
-showSaveProperty.register(FilterableListpicker);
 dimmerColorProperty.register(FilterableListpicker);
 focusOnShowProperty.register(FilterableListpicker);
 hideFilterProperty.register(FilterableListpicker);
