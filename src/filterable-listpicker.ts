@@ -96,7 +96,7 @@ export class FilterableListpicker extends GridLayout {
                       </ListView.itemTemplate>
                   </ListView>
                   <StackLayout row="3" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapse'}}">
-                      <Button text="Done" tap="{{cancel}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
+                      <Button text="Done" tap="{{saveChange}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
                   </StackLayout>
               </GridLayout>
           </GridLayout>`);
@@ -186,6 +186,14 @@ export class FilterableListpicker extends GridLayout {
 	public cancel() {
 		this.notify({
 			eventName: "canceled",
+			object: this
+		});
+		this.hide();
+	}
+
+	public saveChange() {
+		this.notify({
+			eventName: "saveChange",
 			object: this
 		});
 		this.hide();
