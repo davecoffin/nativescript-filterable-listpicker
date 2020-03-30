@@ -89,7 +89,7 @@ export class FilterableListpicker extends GridLayout {
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="{{ !selected ? 'flp-title' : 'flp-title selected' }}"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapse'}}" class="{{ !selected ? 'flp-description' : 'flp-description selected'}}"></Label>
 																	</StackLayout>
-																	<StackLayout row="0" col="2" width="2" borderRadius="2" backgroundColor="{{markerColor}}" visibility="{{markerColor ? 'visible' : 'collapse'}}"/>
+																	<StackLayout row="0" col="2" width="3" borderRadius="2" backgroundColor="{{markerColor}}" visibility="{{markerColor ? 'visible' : 'collapse'}}" margin="-10" padding="-10 0"/>
                               </GridLayout>
                               <Label text="{{$value}}" textWrap="true" class="flp-no-title" visibility="{{title ? 'collapse' : 'visible'}}"></Label>
                           </StackLayout>
