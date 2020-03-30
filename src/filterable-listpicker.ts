@@ -78,23 +78,24 @@ export class FilterableListpicker extends GridLayout {
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
               <StackLayout width="100%" height="100%"></StackLayout>
               <GridLayout width="{{listWidth}}" verticalAlignment="middle" rows="auto, auto, auto, auto" id="dc_flp" class="flp-list-container" loaded="{{loadedInnerContainer}}">
-                  <Label id="headerTitle" row="0" text="{{headingTitle}}" class="flp-heading-title" visibility="{{headingTitle ? 'visible' : 'collapsed'}}"></Label>
-                  <TextField hint="{{hintText}}" row="1" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapsed'}}" loaded="{{loadedTextField}}"></TextField>
+                  <Label id="headerTitle" row="0" text="{{headingTitle}}" class="flp-heading-title" visibility="{{headingTitle ? 'visible' : 'collapse'}}"></Label>
+                  <TextField hint="{{hintText}}" row="1" text="{{filterText}}" id="filterTextField" class="flp-hint-field" visibility="{{enableSearch ? 'visible' : 'collapse'}}" loaded="{{loadedTextField}}"></TextField>
                   <ListView id="filterLV" items="{{ source }}" row="2" height="{{listHeight}}" itemTap="{{choose}}" class="flp-listview" itemTemplateSelector="$index">
                       <ListView.itemTemplate>
                           <StackLayout id="{{id}}" class="flp-row">
-                              <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapsed'}}" class="{{ !locked ? 'flp-row-container' : 'flp-row-container locked' }}">
-                                  <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapsed'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
+                              <GridLayout columns="auto, *, auto" visibility="{{title ? 'visible' : 'collapse'}}" class="{{ !locked ? 'flp-row-container' : 'flp-row-container locked' }}">
+                                  <Image src="{{image ? image : null}}" width="30" visibility="{{image ? 'visible' : 'collapse'}}" stretch="aspectFit" rowSpan="2" class="flp-image"></Image>
                                   <StackLayout class="flp-title-container" col="1" verticalAlignment="middle">
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="{{ !selected ? 'flp-title' : 'flp-title selected' }}"></Label>
-                                      <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapsed'}}" class="{{ !selected ? 'flp-description' : 'flp-description selected'}}"></Label>
-                                  </StackLayout>
+                                      <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapse'}}" class="{{ !selected ? 'flp-description' : 'flp-description selected'}}"></Label>
+																	</StackLayout>
+																	<StackLayout row="0" col="2" width="2" borderRadius="2" backgroundColor="{{markerColor}}" visibility="{{markerColor ? 'visible' : 'collapse'}}"/>
                               </GridLayout>
-                              <Label text="{{$value}}" textWrap="true" class="flp-no-title" visibility="{{title ? 'collapsed' : 'visible'}}"></Label>
+                              <Label text="{{$value}}" textWrap="true" class="flp-no-title" visibility="{{title ? 'collapse' : 'visible'}}"></Label>
                           </StackLayout>
                       </ListView.itemTemplate>
                   </ListView>
-                  <StackLayout row="3" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapsed'}}">
+                  <StackLayout row="3" class="flp-cancel-container" visibility="{{showCancel ? 'visible' : 'collapse'}}">
                       <Button text="Done" tap="{{cancel}}" verticalAlignment="middle" class="flp-btn-cancel"></Button>
                   </StackLayout>
               </GridLayout>
@@ -341,6 +342,7 @@ export interface SourcesInterface {
 	description?: string;
 	locked?: boolean;
 	selected?: boolean;
+	markerColor?: string;
 }
 
 export class SourcesDataItem implements SourcesInterface {
@@ -349,12 +351,14 @@ export class SourcesDataItem implements SourcesInterface {
 	description?: string;
 	locked?: boolean;
 	selected?: boolean;
+	markerColor?: string;
 
-	constructor(title: string, image?: any, description?: string, locked?: boolean, selected?: boolean) {
+	constructor(title: string, image?: any, description?: string, locked?: boolean, selected?: boolean, markerColor?: string) {
 		this.title = title;
 		this.image = image;
 		this.description = description;
 		this.locked = locked;
 		this.selected = selected;
+		this.markerColor = markerColor;
 	}
 }
