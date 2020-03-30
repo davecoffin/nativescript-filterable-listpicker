@@ -110,6 +110,7 @@ export class FilterableListpicker extends GridLayout {
 	}
 	public static canceledEvent = "canceled";
 	public static itemTappedEvent = "itemTapped";
+	public static saveChangeEvent = "saveChange";
 	public source: any;
 	public headingTitle: string;
 	public dimmerColor: any;
@@ -198,7 +199,7 @@ export class FilterableListpicker extends GridLayout {
 
 	public saveChange() {
 		this.notify({
-			eventName: "saveChange",
+			eventName: "SaveChange",
 			object: this
 		});
 		this.hide();
