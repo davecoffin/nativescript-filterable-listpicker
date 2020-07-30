@@ -11,45 +11,45 @@ let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
 export const listWidthProperty = new Property<FilterableListpicker, string>({
 	name: "listWidth",
-	defaultValue: "300"
+	defaultValue: "300",
 });
 export const listHeightProperty = new Property<FilterableListpicker, string>({
 	name: "listHeight",
-	defaultValue: "300"
+	defaultValue: "300",
 });
 export const headingTitleProperty = new Property<FilterableListpicker, string>({
 	name: "headingTitle",
-	defaultValue: undefined
+	defaultValue: undefined,
 });
 export const enableSearchProperty = new Property<FilterableListpicker, boolean>({
 	name: "enableSearch",
 	defaultValue: true,
-	valueConverter: booleanConverter
+	valueConverter: booleanConverter,
 });
 export const showCancelProperty = new Property<FilterableListpicker, boolean>({
 	name: "showCancel",
 	defaultValue: true,
-	valueConverter: booleanConverter
+	valueConverter: booleanConverter,
 });
 export const dimmerColorProperty = new Property<FilterableListpicker, string>({
 	name: "dimmerColor",
-	defaultValue: "rgba(0,0,0,0.8)"
+	defaultValue: "rgba(0,0,0,0.8)",
 });
 export const blurProperty = new Property<FilterableListpicker, string>({
 	name: "blur",
-	defaultValue: "none"
+	defaultValue: "none",
 });
 export const focusOnShowProperty = new Property<FilterableListpicker, boolean>({
 	name: "focusOnShow",
-	defaultValue: false
+	defaultValue: false,
 });
 export const hideFilterProperty = new Property<FilterableListpicker, boolean>({
 	name: "hideFilter",
-	defaultValue: false
+	defaultValue: false,
 });
 export const hintTextProperty = new Property<FilterableListpicker, string>({
 	name: "hintText",
-	defaultValue: "Enter text to filter..."
+	defaultValue: "Enter text to filter...",
 });
 export const sourceProperty = new Property<FilterableListpicker, ObservableArray<any>>({
 	name: "source",
@@ -58,11 +58,11 @@ export const sourceProperty = new Property<FilterableListpicker, ObservableArray
 	valueChanged: (target, oldValue, newValue) => {
 		if (!filtering) {
 			while (unfilteredSource.length) unfilteredSource.pop();
-			newValue.forEach(element => {
+			newValue.forEach((element) => {
 				unfilteredSource.push(element);
 			});
 		}
-	}
+	},
 });
 
 export class FilterableListpicker extends GridLayout {
@@ -73,6 +73,7 @@ export class FilterableListpicker extends GridLayout {
 
 	onLoaded() {
 		super.onLoaded();
+		console.log(" ---------- LISTPICKER LOADED ----------");
 		// let innerComponent = builder.load(__dirname + '/filterable-listpicker.xml') as View;
 		let innerComponent = builder.parse(`
           <GridLayout id="dc_flp_container" class="flp-container" visibility="collapsed" loaded="{{loadedContainer}}">
@@ -106,12 +107,14 @@ export class FilterableListpicker extends GridLayout {
 	public static canceledEvent = "canceled";
 	public static itemTappedEvent = "itemTapped";
 	public source: any;
+	public id: any;
 	public headingTitle: string;
 	public dimmerColor: any;
 	public hintText: any;
 	public hideFilter: any;
 	public enableSearch: boolean;
 	public blur: any;
+	public makerColor: string;
 	private blurView: any = false;
 	public focusOnShow: any;
 	private _container: GridLayout;
@@ -165,11 +168,12 @@ export class FilterableListpicker extends GridLayout {
 		const lv = this.getViewById("filterLV") as any;
 		const selectedItem = this.source[args.index];
 		const item = args.view;
+		console.log("Selected Item ", item);
 		this.notify({
 			eventName: "itemTapped",
 			object: this,
 			item,
-			selectedItem
+			selectedItem,
 		});
 		this.hide();
 	}
@@ -179,7 +183,7 @@ export class FilterableListpicker extends GridLayout {
 		this.notify({
 			eventName: "itemUpdated",
 			object: this,
-			selectedItem
+			selectedItem,
 		});
 	}
 
@@ -188,7 +192,7 @@ export class FilterableListpicker extends GridLayout {
 		this.notify({
 			eventName: "canceled",
 			object: this,
-			selectedItem
+			selectedItem,
 		});
 		this.hide();
 	}
@@ -212,11 +216,11 @@ export class FilterableListpicker extends GridLayout {
 			this._container
 				.animate({
 					opacity: 0,
-					duration: 200
+					duration: 200,
 				})
 				.then(
-					_ => {},
-					err => {}
+					(_) => {},
+					(err) => {}
 				);
 		}
 
@@ -230,14 +234,14 @@ export class FilterableListpicker extends GridLayout {
 				scale: { x: 0.7, y: 0.7 },
 				opacity: 0,
 				duration: 400,
-				curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
+				curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1),
 			})
 			.then(
 				() => {
 					this.visibility = enums.Visibility.collapse;
 					this._container.visibility = "collapse";
 				},
-				err => {}
+				(err) => {}
 			);
 	}
 
@@ -245,7 +249,7 @@ export class FilterableListpicker extends GridLayout {
 		this.visibility = enums.Visibility.visible;
 		this._container.visibility = "visible";
 
-		this.source = unfilteredSource.filter(i => true);
+		this.source = unfilteredSource.filter((i) => true);
 		if (isIOS && this.blur && this.blur !== "none") {
 			let iosView: UIView = this._container.ios;
 			let effectView = UIVisualEffectView.alloc().init();
@@ -271,11 +275,11 @@ export class FilterableListpicker extends GridLayout {
 			this._container
 				.animate({
 					opacity: 1,
-					duration: 200
+					duration: 200,
 				})
 				.then(
-					_ => {},
-					err => {}
+					(_) => {},
+					(err) => {}
 				);
 		}
 
@@ -287,11 +291,11 @@ export class FilterableListpicker extends GridLayout {
 				scale: { x: 1, y: 1 },
 				opacity: 1,
 				duration: 400,
-				curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1)
+				curve: AnimationCurve.cubicBezier(0.1, 0.1, 0.1, 1),
 			})
 			.then(
-				_ => {},
-				err => {}
+				(_) => {},
+				(err) => {}
 			);
 
 		if (this.enableSearch) {
@@ -315,7 +319,7 @@ export class FilterableListpicker extends GridLayout {
 
 	private _searchFilterFn(data: any) {
 		filtering = true;
-		this.source = unfilteredSource.filter(item => {
+		this.source = unfilteredSource.filter((item) => {
 			if (item.title) {
 				return item.title.toLowerCase().indexOf(data.value.toLowerCase()) !== -1;
 			} else {
