@@ -168,7 +168,7 @@ export class FilterableListpicker extends GridLayout {
 		const lv = this.getViewById("filterLV") as any;
 		const selectedItem = this.source[args.index];
 		const item = args.view;
-		console.log("Selected Item ", item);
+		console.log("Selected Item ", item.enabled);
 		this.notify({
 			eventName: "itemTapped",
 			object: this,
