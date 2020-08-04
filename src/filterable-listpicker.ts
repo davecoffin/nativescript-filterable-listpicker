@@ -90,7 +90,7 @@ export class FilterableListpicker extends GridLayout {
                                       <Label text="{{title ? title : ''}}" textWrap="true" class="{{ !selected ? 'flp-title' : 'flp-title selected' }}"></Label>
                                       <Label text="{{description ? description : ''}}" textWrap="true" visibility="{{description ? 'visible' : 'collapse'}}" class="{{ !selected ? 'flp-description' : 'flp-description selected'}}"></Label>
 																	</StackLayout>
-																	<StackLayout row="0" col="2" width="3" borderRadius="2" backgroundColor="{{markerColor}}" visibility="{{markerColor ? 'visible' : 'collapse'}}" margin="-5 -10" padding="-5 0"/>
+																	<StackLayout row="0" col="2" width="3" borderRadius="2" backgroundColor="{{markerColor, markerColor}}" visibility="{{markerColor ? 'visible' : 'collapse'}}" margin="-5 -10" padding="-5 0"/>
                               </GridLayout>
                               <Label text="{{$value}}" textWrap="true" class="flp-no-title" visibility="{{title ? 'collapse' : 'visible'}}"></Label>
                           </StackLayout>
@@ -168,7 +168,6 @@ export class FilterableListpicker extends GridLayout {
 		const lv = this.getViewById("filterLV") as any;
 		const selectedItem = this.source[args.index];
 		const item = args.view;
-		console.log("Selected Item ", item.enabled);
 		this.notify({
 			eventName: "itemTapped",
 			object: this,
@@ -359,7 +358,7 @@ export class SourcesDataItem implements SourcesInterface {
 	selected?: boolean;
 	markerColor?: string;
 
-	constructor(title: string, image?: any, description?: string, locked?: boolean, selected?: boolean, markerColor?: string) {
+	constructor(title: string, image?: any, description?: string, locked?: boolean, selected?: boolean, markerColor: string = "gray") {
 		this.title = title;
 		this.image = image;
 		this.description = description;
