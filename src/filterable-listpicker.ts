@@ -114,7 +114,7 @@ export class FilterableListpicker extends GridLayout {
 	public hideFilter: any;
 	public enableSearch: boolean;
 	public blur: any;
-	public makerColor: string;
+	public markerColor: string;
 	private blurView: any = false;
 	public focusOnShow: any;
 	private _container: GridLayout;
