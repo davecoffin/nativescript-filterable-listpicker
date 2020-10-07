@@ -1,21 +1,14 @@
 {
-  "nativescript": {
-    "id": "org.nativescript.filterablelistpicker",
-    "tns-ios": {
-      "version": "6.3.0"
-    },
-    "tns-android": {
-      "version": "6.3.1"
-    }
-  },
   "dependencies": {
     "nativescript-filterable-listpicker": "file:../src",
     "nativescript-theme-core": "^1.0.4",
-    "tns-core-modules": "6.3.2"
+    "@nativescript/core": "7.0.0"
   },
   "devDependencies": {
-    "nativescript-dev-webpack": "1.4.0",
-    "tns-platform-declarations": "^6.0.0",
+    "@nativescript/android": "7.0.0",
+    "@nativescript/ios": "7.0.1",
+    "@nativescript/types": "7.0.0",
+    "@nativescript/webpack": "3.0.0",
     "typescript": "^3.7.4"
   },
   "scripts": {
@@ -28,5 +21,6 @@
     "start-ios-bundle": "npm run ns-bundle --ios --run-app",
     "build-android-bundle": "npm run ns-bundle --android --build-app",
     "build-ios-bundle": "npm run ns-bundle --ios --build-app"
-  }
+  },
+  "main": "app.js"
 }
