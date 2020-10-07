@@ -1,18 +1,17 @@
-import { ObservableArray } from "tns-core-modules/data/observable-array";
+import { ObservableArray, PropertyChangeData } from "@nativescript/core";
 
 import {
   View,
-  Property,
-  booleanConverter,
-  PropertyChangeData
-} from "tns-core-modules/ui/core/view";
-import { AnimationCurve } from "tns-core-modules/ui/enums";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
-import { TextField } from "tns-core-modules/ui/text-field";
-import { isIOS } from "tns-core-modules/platform";
-import * as enums from "tns-core-modules/ui/enums";
+  Property
+} from "@nativescript/core/ui/core/view";
+import { AnimationCurve } from "@nativescript/core/ui/enums";
+import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
+import { TextField } from "@nativescript/core/ui/text-field";
+import { isIOS } from "@nativescript/core/platform";
+import * as enums from "@nativescript/core/ui/enums";
+import { booleanConverter } from "@nativescript/core/ui/core/view-base";
 
-let builder = require("tns-core-modules/ui/builder");
+let builder = require("@nativescript/core/ui/builder");
 
 let unfilteredSource: Array<any> = [];
 let filtering: boolean = false;
