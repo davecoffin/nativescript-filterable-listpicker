@@ -5,12 +5,6 @@
     "main": "filterable-listpicker",
     "typings": "index.d.ts",
     "nativescript": {
-        "tns-android": {
-            "version": "6.3.0"
-        },
-        "tns-ios": {
-            "version": "6.3.0"
-        },
         "plugin": {
             "nan": "true",
             "pan": "true",
@@ -74,11 +68,12 @@
     "homepage": "https://git.master.technology/proplugins/nativescript-filterable-listpicker",
     "readmeFilename": "README.md",
     "devDependencies": {
+        "@nativescript/core": "7.0.10",
         "rimraf": "^2.5.0",
-        "tns-core-modules": "^6.0.0",
-        "tns-platform-declarations": "^6.0.0",
         "tslint": "^5.0.0",
-        "typescript": "^3.7.4"
+        "typescript": "3.9.7",
+        "@nativescript/types": "7.0.0",
+        "@nativescript/webpack": "^3.0.5"
     },
     "dependencies": {},
     "bootstrapper": "nativescript-plugin-seed"
