@@ -1,8 +1,8 @@
-import { Observable } from 'tns-core-modules/data/observable';
+import { Observable } from '@nativescript/core/data/observable';
 import { FilterableListpicker } from 'nativescript-filterable-listpicker';
-import * as frame from 'tns-core-modules/ui/frame';
-import { Page } from 'tns-core-modules/ui/frame';
-import * as  http from "tns-core-modules/http";
+import * as frame from '@nativescript/core/ui/frame';
+import { Page } from '@nativescript/core';
+import * as  http from "@nativescript/core/http";
     
 let API_KEY = "__YOUR_GOOGLE_API_KEY__";
 let placesApiUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
