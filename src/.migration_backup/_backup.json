@@ -1,0 +1,10 @@
+{
+	"name": "migration",
+	"paths": [
+		"package.json",
+		"package-lock.json",
+		"nsconfig.json",
+		"package.json",
+		"nsconfig.json"
+	]
+}

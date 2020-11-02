@@ -75,8 +75,6 @@
     "tslint": "^5.0.0",
     "typescript": "^3.7.4"
   },
-  "dependencies": {
-    "@nativescript/core": "^7.0.13"
-  },
+  "dependencies": {},
   "bootstrapper": "nativescript-plugin-seed"
 }
